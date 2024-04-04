@@ -10,7 +10,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 	return $request->user();
 });
 
-Route::post('/register', [AuthController::class, 'store'])
+Route::post('/register', [AuthController::class, 'register'])
 				->middleware('guest')
 				->name('register');
 
@@ -18,8 +18,6 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->na
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:sanctum')->name('logout');
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-
-// Route::post('/reset-password/{email}/{token}', [AuthController::class, 'resetPassword'])->middleware('guest');
 
 Route::post('/reset-password/{email}/{token}', [AuthController::class, 'resetPassword'])->name('password.reset')->middleware('guest');
 Route::get('/reset-password/{email}/{token}/check-expiration', [AuthController::class, 'CheckExpration'])->name('password.reset-expiration')->middleware('guest');

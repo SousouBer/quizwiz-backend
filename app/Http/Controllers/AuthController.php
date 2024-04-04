@@ -33,12 +33,12 @@ class AuthController extends Controller
 
 			$expirationTime = $createdAt->addMinutes(config('auth.passwords.users.expire'));
 			if ($expirationTime->isPast()) {
-				return response()->json(['title' => 'Token expired', 'message' => 'Your token has expired. Request resetting password again.'], 403);
+				return response()->json(['title' => 'Token Expired', 'message' => 'Your token has expired. Request resetting password again.'], 403);
 			}
 		}
 	}
 
-	public function store(RegistrationRequest $request): JsonResponse
+	public function register(RegistrationRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
 
@@ -46,7 +46,7 @@ class AuthController extends Controller
 
 		$user->notify(new VerifyEmail($this->verificationUrl($user)));
 
-		return response()->json(['message' => 'User created successfully'], 201);
+		return response()->json(['title' => 'Registration Successful', 'message' => 'You have successfully created an account.'], 200);
 	}
 
 	public function login(LoginRequest $request): JsonResponse
@@ -56,7 +56,7 @@ class AuthController extends Controller
 		if (Auth::attempt($credentials)) {
 			$request->session()->regenerate();
 
-			return response()->json(['message' => 'User logged in successfully'], 200);
+			return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
 		}
 
 		return response()->json(['password' => 'Email or password is incorrect'], 404);
@@ -70,7 +70,7 @@ class AuthController extends Controller
 
 		$request->session()->regenerateToken();
 
-		return response()->json(['message' => 'Logged out successfully']);
+		return response()->json(['title' => 'Logout Success', 'message' => 'Your have successfully logged out.']);
 	}
 
 	public function resetPassword(PasswordResetRequest $request, string $email, string $token): JsonResponse
@@ -87,7 +87,7 @@ class AuthController extends Controller
 
 		event(new PasswordReset($user));
 
-		return response()->json(['title' => 'Password reset', 'message' => 'Your password has been successfully reset.', 200]);
+		return response()->json(['title' => 'Password Reset', 'message' => 'Your password has been successfully reset.', 200]);
 	}
 
 	public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
@@ -104,7 +104,7 @@ class AuthController extends Controller
 			$email
 		);
 
-		return response()->json(['title' => 'Link sent', 'message' => 'Your email verification link has been sent. Check your inbox!'], 200);
+		return response()->json(['title' => 'Link Sent', 'message' => 'Your email verification link has been sent. Check your inbox!'], 200);
 	}
 
 	protected function verificationUrl(User $user): string
