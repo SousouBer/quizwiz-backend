@@ -15,17 +15,17 @@ class VerifyEmailController extends Controller
 		$user = User::find($id);
 
 		if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-			return response()->json(['message' => 'Invalid verification hash'], 400);
+			return response()->json(['title' => 'Invalid Credentials', 'message' => 'Invalid verification hash'], 400);
 		}
 
 		if ($user->hasVerifiedEmail()) {
-			return response()->json(['message' => 'Email already verified'], 422);
+			return response()->json(['title' => 'Already Verified', 'message' => 'Email has already been verified.'], 422);
 		}
 
 		$user->markEmailAsVerified();
 
 		event(new Verified($user));
 
-		return response()->json(['message' => 'User verified successfully']);
+		return response()->json(['title' => 'Verification Successful', 'message' => 'You have successfully verified your email', 200]);
 	}
 }

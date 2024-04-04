@@ -46,7 +46,7 @@ class AuthController extends Controller
 
 		$user->notify(new VerifyEmail($this->verificationUrl($user)));
 
-		return response()->json(['title' => 'Registration Successful', 'message' => 'You have successfully created an account.'], 200);
+		return response()->json(['title' => 'Registration Link Sent', 'message' => 'You have successfully created an account. Check your inbox for email verification.'], 200);
 	}
 
 	public function login(LoginRequest $request): JsonResponse
