@@ -6,8 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use App\Notifications\sendPasswordResetNotification;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
 	use HasFactory;
 
@@ -36,5 +38,13 @@ class User extends Authenticatable implements MustVerifyEmail
 			'email_verified_at' => 'datetime',
 			'password'          => 'hashed',
 		];
+	}
+
+	public function sendPasswordResetNotification($token): void
+	{
+		// $url = 'https://example.com/reset-password?token=' . $token;
+		$url = config('app.frontend_url') . '/reset-password?email=' . $this->email . '?token=' . $token;
+
+		$this->notify(new sendPasswordResetNotification($url));
 	}
 }

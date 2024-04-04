@@ -17,6 +17,13 @@ Route::post('/register', [AuthController::class, 'store'])
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('login');
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:sanctum')->name('logout');
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+
+// Route::post('/reset-password/{email}/{token}', [AuthController::class, 'resetPassword'])->middleware('guest');
+
+Route::post('/reset-password/{email}/{token}', [AuthController::class, 'resetPassword'])->name('password.reset')->middleware('guest');
+Route::get('/reset-password/{email}/{token}/check-expiration', [AuthController::class, 'CheckExpration'])->name('password.reset-expiration')->middleware('guest');
+
 Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-				->middleware([CheckTokenExpiration::class, 'signed', 'throttle:6,1'])
-				->name('verification.verify');
+->middleware([CheckTokenExpiration::class, 'signed', 'throttle:6,1'])
+->name('verification.verify');
