@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\VerifyEmailController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckTokenExpiration;
 use Illuminate\Http\Request;
