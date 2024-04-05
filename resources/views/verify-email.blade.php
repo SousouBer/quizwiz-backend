@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>Document</title>
+    <title>Email Verification</title>
     <style>
+        body {
+            width: 100%;
+            background-color: #F3F4F6;
+        }
+
         .main-container {
             align-content: center;
             padding: 2rem 0;
+            margin: 0 auto; 
+            width: 29rem
         }
 
         .heading-logo-container {
@@ -47,22 +52,23 @@
             padding: 1rem 2.5rem;
             border-radius: 0.75rem;
             margin-top: 1rem;
+            color: #fff; 
+            text-decoration: none;"
         }
-
         </style>
 </head>
-<body style="width: 100%; background-color: #F3F4F6;">
-    <div class="main-container" style="margin: 0 auto; width: 29rem;">
+<body>
+    <div class="main-container">
             <div class="heading-logo-container">
-                <img src="{{ config('app.url') . '/images/ quizwiz.png' }}" alt="Quizwiz logo">
+                <img src="{{ asset('/images/quizwiz.png') }}" alt="Quizwiz logo">
                 <h1 class="heading">Verify your email<br> address to get started</h1>
             </div>
             <div>
-                <p class="username">Hi, {{ $username }}</p>
+                <p class="username">Hi, {{ $username }}!</p>
                 <p>You're almost there! To complete your sign up, please<br> verify your email address below.</p>
             </div>
             <div class="btn-container">
-                <a style="color: #fff; text-decoration: none;" class="btn" href="{{config('app.frontend_url') . '/login?email=' .  $email . '&verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
+                <a class="btn" href="{{config('app.frontend_url') . '/login?email=' .  $email . '&verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
             </div>            
         </div>
     </body>
