@@ -80,7 +80,7 @@ class AuthController extends Controller
 		return response()->json(['unverified_user' => 'User has not verified email.'], 404);
 	}
 
-	public function destroy(Request $request): JsonResponse
+	public function logout(Request $request): JsonResponse
 	{
 		Auth::guard('web')->logout();
 
