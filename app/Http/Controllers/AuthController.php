@@ -49,6 +49,19 @@ class AuthController extends Controller
 		return response()->json(['title' => 'Registration Link Sent', 'message' => 'You have successfully created an account. Check your inbox for email verification.'], 200);
 	}
 
+	public function resendEmailVerification(Request $request, string $email): JsonResponse
+	{
+		$user = User::where('email', $email)->first();
+
+		if ($user->hasVerifiedEmail()) {
+			return response()->json(['title' => 'Verified Email', 'message' => 'Your email is already verified. You can log in.'], 422);
+		}
+
+		$user->notify(new VerifyEmail($this->verificationUrl($user)));
+
+		return response()->json(['title' => 'Verification Link Sent', 'message' => 'You have successfully resent an email verification link. Check your inbox!'], 200);
+	}
+
 	public function login(LoginRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
@@ -64,7 +77,7 @@ class AuthController extends Controller
 
 	public function destroy(Request $request): JsonResponse
 	{
-		Auth::logout();
+		Auth::guard('web')->logout();
 
 		$request->session()->invalidate();
 
@@ -109,7 +122,7 @@ class AuthController extends Controller
 
 	protected function verificationUrl(User $user): string
 	{
-		$expiration = Carbon::now()->addMinutes(120);
+		$expiration = Carbon::now()->addMinutes(1);
 
 		return URL::temporarySignedRoute(
 			'verification.verify',

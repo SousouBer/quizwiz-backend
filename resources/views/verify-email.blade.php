@@ -62,8 +62,8 @@
                 <p>You're almost there! To complete your sign up, please<br> verify your email address below.</p>
             </div>
             <div class="btn-container">
-                <a style="color: #fff; text-decoration: none;" class="btn" href="{{config('app.frontend_url') . '/login?verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
+                <a style="color: #fff; text-decoration: none;" class="btn" href="{{config('app.frontend_url') . '/login?email=' .  $email . '&verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
             </div>            
         </div>
     </body>
-</html>
+</html> 

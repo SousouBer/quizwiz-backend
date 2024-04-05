@@ -15,6 +15,7 @@ class VerifyEmail extends Notification
 	public function __construct($verificationUrl)
 	{
 		$this->verificationUrl = explode('/verify-email/', $verificationUrl)[1];
+		// $this->verificationUrl = $verificationUrl;
 	}
 
 	/**
@@ -32,7 +33,7 @@ class VerifyEmail extends Notification
 	 */
 	public function toMail(object $notifiable): MailMessage
 	{
-		return (new MailMessage)->view('verify-email', ['verificationUrl' => $this->verificationUrl, 'username' => $notifiable->username]);
+		return (new MailMessage)->view('verify-email', ['verificationUrl' => $this->verificationUrl, 'username' => $notifiable->username, 'email' => $notifiable->email]);
 	}
 
 	/**

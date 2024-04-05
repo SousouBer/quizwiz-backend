@@ -19,6 +19,10 @@ Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:san
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 
+Route::post('/resend-email-verification/{email}', [AuthController::class, 'resendEmailVerification'])
+				->middleware('guest')
+				->name('resendEmailVerification');
+
 Route::post('/reset-password/{email}/{token}', [AuthController::class, 'resetPassword'])->name('password.reset')->middleware('guest');
 Route::get('/reset-password/{email}/{token}/check-expiration', [AuthController::class, 'CheckExpration'])->name('password.reset-expiration')->middleware('guest');
 
