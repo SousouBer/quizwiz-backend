@@ -66,13 +66,18 @@ class AuthController extends Controller
 	{
 		$credentials = $request->validated();
 
-		if (Auth::attempt($credentials)) {
-			$request->session()->regenerate();
+		$user = User::where('email', $credentials['email'])->first();
 
-			return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
+		if ($user->hasVerifiedEmail()) {
+			if (Auth::attempt($credentials)) {
+				$request->session()->regenerate();
+
+				return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
+			}
+			return response()->json(['password' => 'Email or password is incorrect'], 404);
 		}
 
-		return response()->json(['password' => 'Email or password is incorrect'], 404);
+		return response()->json(['unverified_user' => 'User has not verified email.'], 404);
 	}
 
 	public function destroy(Request $request): JsonResponse
