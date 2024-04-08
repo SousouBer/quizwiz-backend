@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CheckExpiration;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PasswordResetRequest;
@@ -17,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -71,6 +71,10 @@ class AuthController extends Controller
 			return response()->json(['email' => 'User with provided email does not exist'], 404);
 		}
 
+		if ($user->hasVerifiedEmail()) {
+			return response()->json(['email' => 'User with provided email is already verified'], 409);
+		}
+
 		$status = Password::sendResetLink(
 			$email
 		);
@@ -108,19 +112,12 @@ class AuthController extends Controller
 		return response()->json(['title' => 'Verification Link Sent', 'message' => 'You have successfully resent an email verification link. Check your inbox!'], 200);
 	}
 
-	public function CheckExpration(string $email, string $token)
+	public function checkExpiration(string $email, string $token, CheckExpiration $checkExpiration): JsonResponse
 	{
-		$passwordResetToken = DB::table('password_reset_tokens')
-		->where('email', $email)
-		->first();
+		$checkExpiration->handle($email, $token);
 
-		if (Hash::check($token, $passwordResetToken->token)) {
-			$createdAt = Carbon::parse($passwordResetToken->created_at);
-
-			$expirationTime = $createdAt->addMinutes(config('auth.passwords.users.expire'));
-			if ($expirationTime->isPast()) {
-				return response()->json(['title' => 'Token Expired', 'message' => 'Your token has expired. Request resetting password again.'], 403);
-			}
+		if ($checkExpiration) {
+			return response()->json(['title' => 'Token Expired', 'message' => 'Your token has expired. Request resetting password again.'], 403);
 		}
 	}
 

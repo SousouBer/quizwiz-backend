@@ -15,7 +15,7 @@ Route::controller(AuthController::class)->middleware('guest')->group(function ()
 	Route::post('/forgot-password', 'forgotPassword')->name('password.forgot');
 	Route::post('/resend-email-verification/{email}', 'resendEmailVerification')->name('email.resend_verification');
 	Route::post('/reset-password/{email}/{token}', 'resetPassword')->name('password.reset');
-	Route::get('/reset-password/{email}/{token}/check-expiration', 'CheckExpration')->name('password.check_expiration');
+	Route::get('/reset-password/{email}/{token}/check-expiration', 'checkExpiration')->name('password.check_expiration');
 });
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 
