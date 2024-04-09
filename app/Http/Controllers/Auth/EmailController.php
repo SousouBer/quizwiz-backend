@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\CheckExpiration;
+use App\Actions\EmailVerificationUrl;
 use App\Models\User;
 use App\Notifications\VerifyEmail;
-use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
 class EmailController extends Controller
 {
@@ -32,7 +31,7 @@ class EmailController extends Controller
 		return response()->json(['title' => 'Verification Successful', 'message' => 'You have successfully verified your email', 200]);
 	}
 
-	public function resendEmailVerification(Request $request, string $email): JsonResponse
+	public function resendEmailVerification(Request $request, string $email, EmailVerificationUrl $emailVerificationUrl): JsonResponse
 	{
 		$user = User::where('email', $email)->first();
 
@@ -40,7 +39,7 @@ class EmailController extends Controller
 			return response()->json(['title' => 'Verified Email', 'message' => 'Your email is already verified. You can log in.'], 200);
 		}
 
-		$user->notify(new VerifyEmail($this->verificationUrl($user)));
+		$user->notify(new VerifyEmail($emailVerificationUrl->handle($user)));
 
 		return response()->json(['title' => 'Verification Link Sent', 'message' => 'You have successfully resent an email verification link. Check your inbox!'], 200);
 	}
@@ -52,20 +51,5 @@ class EmailController extends Controller
 		if ($invalidToken) {
 			return response()->json(['title' => 'Token Expired', 'message' => 'Your token has expired. Request resetting password again.'], 403);
 		}
-	}
-
-	protected function verificationUrl(User $user): string
-	{
-		$expiration = Carbon::now()->addMinutes(120);
-
-		return URL::temporarySignedRoute(
-			'verification.verify',
-			$expiration,
-			[
-				'id'         => $user->getKey(),
-				'hash'       => sha1($user->email),
-				'expires_at' => $expiration->timestamp,
-			]
-		);
 	}
 }
