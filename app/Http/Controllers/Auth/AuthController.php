@@ -28,8 +28,6 @@ class AuthController extends Controller
 	{
 		$credentials = $request->validated();
 
-		$user = User::where('email', $credentials['email'])->first();
-
 		if (Auth::attempt($credentials)) {
 			$request->session()->regenerate();
 
