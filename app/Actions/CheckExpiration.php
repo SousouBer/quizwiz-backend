@@ -11,7 +11,7 @@ class CheckExpiration
 	public function handle(string $email, string $token): bool
 	{
 		$passwordResetToken = DB::table('password_reset_tokens')
-		->whereEmail($email)->first();
+		->where('email', $email)->first();
 
 		if (Hash::check($token, $passwordResetToken->token)) {
 			$createdAt = Carbon::parse($passwordResetToken->created_at);
