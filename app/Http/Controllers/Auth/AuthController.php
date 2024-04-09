@@ -31,16 +31,12 @@ class AuthController extends Controller
 
 		$user = User::where('email', $credentials['email'])->first();
 
-		if ($user->hasVerifiedEmail()) {
-			if (Auth::attempt($credentials)) {
-				$request->session()->regenerate();
+		if (Auth::attempt($credentials)) {
+			$request->session()->regenerate();
 
-				return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
-			}
-			return response()->json(['password' => 'Email or password is incorrect'], 401);
+			return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
 		}
-
-		return response()->json(['unverified_user' => 'User has not verified email.'], 403);
+		return response()->json(['password' => 'Email or password is incorrect'], 401);
 	}
 
 	public function logout(Request $request): JsonResponse
