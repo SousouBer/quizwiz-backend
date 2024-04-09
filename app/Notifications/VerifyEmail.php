@@ -12,7 +12,7 @@ class VerifyEmail extends Notification
 
 	protected $verificationUrl;
 
-	public function __construct($verificationUrl)
+	public function __construct(string $verificationUrl)
 	{
 		$this->verificationUrl = explode('/verify-email/', $verificationUrl)[1];
 	}

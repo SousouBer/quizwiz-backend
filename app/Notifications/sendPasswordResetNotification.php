@@ -12,7 +12,7 @@ class sendPasswordResetNotification extends Notification
 
 	protected $resetPasswordUrl;
 
-	public function __construct($resetPasswordUrl)
+	public function __construct(string $resetPasswordUrl)
 	{
 		$this->resetPasswordUrl = $resetPasswordUrl;
 	}
