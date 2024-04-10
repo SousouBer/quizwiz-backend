@@ -15,6 +15,7 @@ return new class extends Migration {
 			$table->foreignId('category_id')->constrained()->cascadeOnDelete();
 			$table->foreignId('difficulty_level_id');
 			$table->string('title');
+			$table->string('image');
 			$table->tinyInteger('points')->unsigned();
 			$table->tinyInteger('time')->unsigned();
 			$table->timestamps();
