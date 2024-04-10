@@ -13,8 +13,8 @@ return new class extends Migration {
 		Schema::create('quizzes', function (Blueprint $table) {
 			$table->id();
 			$table->foreignId('category_id')->constrained()->cascadeOnDelete();
+			$table->foreignId('difficulty_level_id');
 			$table->string('title');
-			$table->string('difficulty_level');
 			$table->tinyInteger('points')->unsigned();
 			$table->tinyInteger('time')->unsigned();
 			$table->timestamps();
