@@ -10,15 +10,13 @@ return new class extends Migration {
 	 */
 	public function up(): void
 	{
-		Schema::create('quizzes', function (Blueprint $table) {
+		Schema::create('difficulty_levels', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('difficulty_level_id');
 			$table->string('title');
-			$table->string('image');
-			$table->string('description');
-			$table->string('instructions');
-			$table->tinyInteger('points')->unsigned();
-			$table->tinyInteger('time')->unsigned();
+			$table->string('color');
+			$table->string('color_selected');
+			$table->string('background_color');
+			$table->string('background_color_selected');
 			$table->timestamps();
 		});
 	}
@@ -28,6 +26,6 @@ return new class extends Migration {
 	 */
 	public function down(): void
 	{
-		Schema::dropIfExists('quizzes');
+		Schema::dropIfExists('difficulty_levels');
 	}
 };

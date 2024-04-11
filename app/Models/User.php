@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use App\Notifications\sendPasswordResetNotification;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -38,6 +39,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 			'email_verified_at' => 'datetime',
 			'password'          => 'hashed',
 		];
+	}
+
+	public function quizzes(): BelongsToMany
+	{
+		return $this->belongsToMany(Quiz::class);
 	}
 
 	public function sendPasswordResetNotification($token): void
