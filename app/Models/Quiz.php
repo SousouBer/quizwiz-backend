@@ -12,9 +12,11 @@ class Quiz extends Model
 {
 	use HasFactory;
 
+	protected $guarded = ['id'];
+
 	public function users(): BelongsToMany
 	{
-		return $this->belongsToMany(User::class);
+		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score')->withTimestamps();
 	}
 
 	public function categories(): BelongsToMany
