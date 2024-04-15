@@ -14,6 +14,8 @@ class Quiz extends Model
 
 	protected $guarded = ['id'];
 
+	protected $hidden = ['created_at', 'updated_at', 'difficulty_level_id', 'pivot'];
+
 	public function users(): BelongsToMany
 	{
 		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score')->withTimestamps();
