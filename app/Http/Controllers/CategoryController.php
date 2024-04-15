@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController
 {
-	public function index(): JsonResponse
+	public function index(): AnonymousResourceCollection
 	{
-		$categories = Category::all();
-
-		return response()->json(['categories' => $categories]);
+		return CategoryResource::collection(Category::all());
 	}
 }

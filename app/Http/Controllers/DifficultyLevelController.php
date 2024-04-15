@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DifficultyLevelResource;
 use App\Models\DifficultyLevel;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DifficultyLevelController
 {
-	public function index(): JsonResponse
+	public function index(): AnonymousResourceCollection
 	{
-		$difficultyLevels = DifficultyLevel::select('id', 'title', 'color', 'color_selected', 'background_color', 'background_color_selected')->get();
-
-		return response()->json(['levels' => $difficultyLevels]);
+		return DifficultyLevelResource::collection(DifficultyLevel::all());
 	}
 }

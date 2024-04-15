@@ -30,3 +30,5 @@ Route::get('/verify-email/{id}/{hash}', [EmailController::class, 'verifyEmail'])
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
 Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->name('difficultyLevels.index');
+
+Route::get('/quiz/{id}', [QuizController::class, 'show'])->name('quizzes.show');

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuizResource;
+use App\Http\Resources\SingleQuizResource;
 use App\Models\Quiz;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuizController
 {
-	public function index(): JsonResponse
+	public function index(): AnonymousResourceCollection
 	{
-		$quizzes = Quiz::with(['difficultyLevel' => function ($query) {
-			$query->select('id', 'title', 'color', 'color_selected', 'background_color', 'background_color_selected');
-		}, 'categories'])->get();
+		return QuizResource::collection(Quiz::all());
+	}
 
-		return response()->json(['quizzes' => $quizzes]);
+	public function show(int $id): SingleQuizResource
+	{
+		return new SingleQuizResource(Quiz::findOrFail($id));
 	}
 }
