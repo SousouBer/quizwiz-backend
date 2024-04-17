@@ -22,7 +22,7 @@ class Category extends Resource
 		return [
 			ID::make()->sortable(),
 			BelongsToMany::make('Quizzes'),
-			Text::make('title'),
+			Text::make('title')->rules('required', 'string'),
 		];
 	}
 

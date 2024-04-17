@@ -29,16 +29,16 @@ class Quiz extends Resource
 			BelongsToMany::make('Categories'),
 			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
 				return [
-					Number::make('time_taken')->min(1)->max(20)->step(1),
-					Number::make('score')->min(1)->max(20)->step(1),
+					Number::make('time_taken')->rules('required', 'integer', 'min:1', 'max:20'),
+					Number::make('score')->rules('required', 'integer', 'min:1', 'max:20'),
 				];
 			}),
-			Text::make('title'),
-			Image::make('image'),
-			Markdown::make('description'),
-			Text::make('instructions'),
-			Number::make('points')->min(1)->max(20)->step(1),
-			Number::make('time')->min(1)->max(20)->step(1),
+			Text::make('title')->rules('required', 'string'),
+			Image::make('image')->rules('required', 'image'),
+			Markdown::make('description')->rules('required'),
+			Text::make('instructions')->rules('required', 'string'),
+			Number::make('points')->rules('required', 'integer', 'min:1', 'max:20'),
+			Number::make('time')->rules('required', 'integer', 'min:1', 'max:20'),
 		];
 	}
 

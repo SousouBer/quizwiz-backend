@@ -23,8 +23,8 @@ class Answer extends Resource
 		return [
 			ID::make()->sortable(),
 			BelongsTo::make('Question'),
-			Text::make('text'),
-			Boolean::make('is_correct'),
+			Text::make('text')->rules('required', 'string'),
+			Boolean::make('is_correct')->rules('required', 'boolean'),
 		];
 	}
 

@@ -23,9 +23,9 @@ class DifficultyLevel extends Resource
 		return [
 			ID::make()->sortable(),
 			HasMany::make('Quizzes'),
-			Text::make('title'),
-			Color::make('color'),
-			Color::make('background_color'),
+			Text::make('title')->rules('required', 'string'),
+			Color::make('color')->rules('required', 'string'),
+			Color::make('background_color')->rules('required', 'string'),
 		];
 	}
 

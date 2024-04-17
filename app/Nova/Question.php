@@ -24,7 +24,7 @@ class Question extends Resource
 			ID::make()->sortable(),
 			HasMany::make('Answer'),
 			BelongsTo::make('Quiz'),
-			Text::make('text'),
+			Text::make('text')->rules('required', 'string'),
 		];
 	}
 
