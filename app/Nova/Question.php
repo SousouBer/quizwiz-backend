@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\Question as ModelsQuestion;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -10,11 +11,11 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Question extends Resource
 {
-	public static $model = \App\Models\Question::class;
+	public static ModelsQuestion $model = \App\Models\Question::class;
 
-	public static $title = 'id';
+	public static string $title = 'id';
 
-	public static $search = [
+	public static array $search = [
 		'id',
 	];
 

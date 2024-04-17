@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\User as ModelsUser;
 use Illuminate\Validation\Rules;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
@@ -13,11 +14,11 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
 {
-	public static $model = \App\Models\User::class;
+	public static ModelsUser $model = \App\Models\User::class;
 
-	public static $title = 'name';
+	public static string $title = 'name';
 
-	public static $search = [
+	public static array $search = [
 		'id', 'name', 'email',
 	];
 

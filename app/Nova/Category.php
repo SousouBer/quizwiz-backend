@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\Category as ModelsCategory;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -9,11 +10,11 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Category extends Resource
 {
-	public static $model = \App\Models\Category::class;
+	public static ModelsCategory $model = \App\Models\Category::class;
 
-	public static $title = 'id';
+	public static string $title = 'id';
 
-	public static $search = [
+	public static array $search = [
 		'id',
 	];
 
