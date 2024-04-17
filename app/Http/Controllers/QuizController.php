@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuizResource;
-use App\Http\Resources\SingleQuizResource;
 use App\Models\Quiz;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -11,11 +10,15 @@ class QuizController
 {
 	public function index(): AnonymousResourceCollection
 	{
-		return QuizResource::collection(Quiz::all());
+		$quizzes = Quiz::with(['categories', 'difficultyLevel', 'questions', 'answers', 'users'])->get();
+
+		return QuizResource::collection($quizzes);
 	}
 
-	public function show(int $id): SingleQuizResource
+	public function show(int $id): QuizResource
 	{
-		return new SingleQuizResource(Quiz::findOrFail($id));
+		$quiz = Quiz::with(['categories', 'questions'])->findOrFail($id);
+
+		return QuizResource::make(Quiz::findOrFail($id));
 	}
 }
