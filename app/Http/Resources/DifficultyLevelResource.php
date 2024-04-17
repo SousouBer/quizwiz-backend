@@ -13,9 +13,7 @@ class DifficultyLevelResource extends JsonResource
 			'id'                        => $this->id,
 			'title'                     => $this->title,
 			'color'                     => $this->color,
-			'color_selected'            => $this->color_selected,
 			'background_color'          => $this->background_color,
-			'background_color_selected' => $this->background_color_selected,
 		];
 	}
 }
