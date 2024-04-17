@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\User;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
@@ -28,7 +27,7 @@ class Quiz extends Resource
 			ID::make()->sortable(),
 			BelongsTo::make('difficulty_level'),
 			BelongsToMany::make('Categories'),
-			BelongsToMany::make('Users')->fields(function (NovaRequest $request, User $relatedModel) {
+			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
 				return [
 					Number::make('time_taken')->min(1)->max(20)->step(1),
 					Number::make('score')->min(1)->max(20)->step(1),

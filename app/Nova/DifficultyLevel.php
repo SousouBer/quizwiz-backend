@@ -25,9 +25,7 @@ class DifficultyLevel extends Resource
 			HasMany::make('Quizzes'),
 			Text::make('title'),
 			Color::make('color'),
-			Color::make('color_selected'),
 			Color::make('background_color'),
-			Color::make('background_color_selected'),
 		];
 	}
 

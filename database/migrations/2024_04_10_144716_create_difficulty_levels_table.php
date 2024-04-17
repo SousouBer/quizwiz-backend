@@ -14,9 +14,7 @@ return new class extends Migration {
 			$table->id();
 			$table->string('title');
 			$table->string('color');
-			$table->string('color_selected');
 			$table->string('background_color');
-			$table->string('background_color_selected');
 			$table->timestamps();
 		});
 	}

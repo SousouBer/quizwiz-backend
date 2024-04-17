@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\Quiz;
 use Illuminate\Validation\Rules;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
@@ -26,7 +25,7 @@ class User extends Resource
 	{
 		return [
 			ID::make()->sortable(),
-			BelongsToMany::make('Quizzes')->fields(function (NovaRequest $request, Quiz $relatedModel) {
+			BelongsToMany::make('Quizzes')->fields(function (NovaRequest $request, $relatedModel) {
 				return [
 					Number::make('time_taken')->min(1)->max(20)->step(1),
 					Number::make('score')->min(1)->max(20)->step(1),

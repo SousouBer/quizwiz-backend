@@ -10,8 +10,9 @@ class QuestionResource extends JsonResource
 	public function toArray(Request $request): array
 	{
 		return [
-			'id'   => $this->id,
-			'text' => $this->text,
+			'id'      => $this->id,
+			'text'    => $this->text,
+			'points'  => $this->answers()->where('is_correct', true)->count(),
 		];
 	}
 }
