@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\Quiz as ModelsQuiz;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
@@ -14,11 +13,11 @@ use Laravel\Nova\Fields\Number;
 
 class Quiz extends Resource
 {
-	public static ModelsQuiz $model = \App\Models\Quiz::class;
+	public static $model = \App\Models\Quiz::class;
 
-	public static string $title = 'id';
+	public static $title = 'id';
 
-	public static array $search = [
+	public static $search = [
 		'id',
 	];
 

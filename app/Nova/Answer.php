@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\Answer as ModelsAnswer;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -11,11 +10,11 @@ use Laravel\Nova\Fields\Boolean;
 
 class Answer extends Resource
 {
-	public static ModelsAnswer $model = \App\Models\Answer::class;
+	public static $model = \App\Models\Answer::class;
 
-	public static string $title = 'id';
+	public static $title = 'id';
 
-	public static array $search = [
+	public static $search = [
 		'id',
 	];
 

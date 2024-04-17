@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\DifficultyLevel as ModelsDifficultyLevel;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
@@ -11,11 +10,11 @@ use Laravel\Nova\Fields\HasMany;
 
 class DifficultyLevel extends Resource
 {
-	public static ModelsDifficultyLevel $model = \App\Models\DifficultyLevel::class;
+	public static $model = \App\Models\DifficultyLevel::class;
 
-	public static string $title = 'id';
+	public static $title = 'id';
 
-	public static array $search = [
+	public static $search = [
 		'id',
 	];
 
