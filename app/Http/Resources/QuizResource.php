@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class QuizResource extends JsonResource
 {
@@ -21,7 +22,9 @@ class QuizResource extends JsonResource
 			'image'            => $this->image,
 			'points'           => $this->answers()->where('is_correct', true)->count(),
 			'time'             => $this->time,
-			'plays'            => $this->users()->count(),
+			'plays'            => DB::table('quiz_user')
+			->where('quiz_id', $this->id)
+			->count(),
 		];
 	}
 }

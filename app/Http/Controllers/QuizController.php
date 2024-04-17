@@ -10,15 +10,11 @@ class QuizController
 {
 	public function index(): AnonymousResourceCollection
 	{
-		$quizzes = Quiz::with(['categories', 'difficultyLevel', 'questions', 'answers', 'users'])->get();
-
-		return QuizResource::collection($quizzes);
+		return QuizResource::collection(Quiz::all());
 	}
 
-	public function show(int $id): QuizResource
+	public function show(Quiz $quiz): QuizResource
 	{
-		$quiz = Quiz::with(['categories', 'questions'])->findOrFail($id);
-
-		return QuizResource::make(Quiz::findOrFail($id));
+		return QuizResource::make($quiz);
 	}
 }
