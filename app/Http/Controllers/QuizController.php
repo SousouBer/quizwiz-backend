@@ -10,7 +10,9 @@ class QuizController
 {
 	public function index(): AnonymousResourceCollection
 	{
-		return QuizResource::collection(Quiz::all());
+		$quizzes = Quiz::paginate(9);
+
+		return QuizResource::collection($quizzes);
 	}
 
 	public function show(Quiz $quiz): QuizResource
