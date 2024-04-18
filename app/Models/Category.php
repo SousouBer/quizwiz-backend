@@ -10,6 +10,8 @@ class Category extends Model
 {
 	use HasFactory;
 
+	protected $hidden = ['created_at', 'updated_at', 'pivot'];
+
 	public function quizzes(): BelongsToMany
 	{
 		return $this->belongsToMany(Quiz::class);

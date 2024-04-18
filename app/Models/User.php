@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
 	public function quizzes(): BelongsToMany
 	{
-		return $this->belongsToMany(Quiz::class);
+		return $this->belongsToMany(Quiz::class)->withPivot('time_taken', 'score')->withTimestamps();
 	}
 
 	public function sendPasswordResetNotification($token): void

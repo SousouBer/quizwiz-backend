@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DifficultyLevelController;
+use App\Http\Controllers\QuizController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +26,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/verify-email/{id}/{hash}', [EmailController::class, 'verifyEmail'])
 ->middleware(['valid', 'signed', 'throttle:6,1'])
 ->name('verification.verify');
+
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->name('difficultyLevels.index');
+
+Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
