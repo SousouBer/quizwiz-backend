@@ -9,7 +9,7 @@ class QuestionFactory extends Factory
 	public function definition(): array
 	{
 		return [
-			'text' => fake()->realText(20),
+			'text' => fake()->words(8, true),
 		];
 	}
 }

@@ -9,10 +9,10 @@ class QuizFactory extends Factory
 	public function definition(): array
 	{
 		return [
-			'title'        => fake()->realText(10),
+			'title'        => fake()->words(5, true),
 			'image'        => fake()->imageUrl(),
-			'description'  => fake()->realText(50),
-			'instructions' => fake()->realText(20),
+			'description'  => fake()->words(10, true),
+			'instructions' => fake()->paragraph(),
 			'points'       => fake()->numberBetween(1, 10),
 			'time'         => fake()->numberBetween(1, 10),
 		];
