@@ -13,17 +13,18 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-	/**
-	 * Seed the application's database.
-	 */
 	public function run(): void
 	{
-		DifficultyLevel::factory(6)->
-		has(Quiz::factory(5)->
-		hasAttached(Category::factory()
-		->count(rand(1, 9)))
-		->has(Question::factory(5)
-		->has(Answer::factory()->count(4))))->create();
+		$categories = Category::factory(20)->create();
+
+		DifficultyLevel::factory(6)->has(
+			Quiz::factory(5)->has(
+				Question::factory(5)
+				->has(Answer::factory()->count(4))
+			)->afterCreating(function ($quiz) use ($categories) {
+				$quiz->categories()->attach($categories->random(rand(1, 5))->pluck('id'));
+			})
+		)->create();
 
 		User::factory()->create([
 			'username'  => 'Test User',
