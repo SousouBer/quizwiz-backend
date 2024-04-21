@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuizResultsRequest;
 use App\Http\Resources\QuizResource;
 use App\Models\Quiz;
-use Clockwork\Request\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuizController
@@ -19,18 +20,14 @@ class QuizController
 		return QuizResource::make($quiz);
 	}
 
-	public function store(Request $request)
+	public function store(QuizResultsRequest $request): JsonResponse
 	{
-		$arr = [
-			'quiz_id' => 3,
-			'time'    => '4:56',
-			'answers' => [],
-		];
+		$quizResults = $request->validated();
 
-		$quiz = Quiz::with('questions.answers')->findOrFail($arr['quiz_id']);
+		$quiz = Quiz::with('questions.answers')->findOrFail($quizResults['quiz_id']);
 
-		$result = $quiz->calculateScore($arr, $arr['time']);
+		$finalResults = $quiz->calculateScore($quizResults, $quizResults['time']);
 
-		return response()->json($result);
+		return response()->json($finalResults);
 	}
 }
