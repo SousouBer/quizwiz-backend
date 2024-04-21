@@ -11,7 +11,7 @@ class QuizResultsRequest extends FormRequest
 		return [
 			'quiz_id' => 'required|exists:quizzes,id',
 			'time'    => 'required|string',
-			'answers' => 'required|array',
+			'answers' => 'sometimes|array',
 		];
 	}
 }
