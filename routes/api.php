@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailController;
 use App\Http\Controllers\Auth\PasswordController;
@@ -33,4 +32,4 @@ Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
 Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->name('difficultyLevels.index');
 
 Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-Route::post('/answers', [AnswerController::class, 'store'])->name('answers.store');
+Route::post('/answers', [QuizController::class, 'store'])->name('answers.store');
