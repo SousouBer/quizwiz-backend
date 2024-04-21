@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CalculateScore;
+use App\Actions\ChangeTimeFormat;
+use App\Actions\SaveQuizResults;
 use App\Http\Requests\QuizResultsRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
@@ -20,13 +23,17 @@ class QuizController
 		return QuizResource::make($quiz);
 	}
 
-	public function store(QuizResultsRequest $request): QuizResulResource
+	public function store(QuizResultsRequest $request, CalculateScore $calculateScore, ChangeTimeFormat $changeTimeFormat, SaveQuizResults $saveQuizResults): QuizResulResource
 	{
 		$quizResults = $request->validated();
 
 		$quiz = Quiz::with('questions.answers')->findOrFail($quizResults['quiz_id']);
 
-		$finalResults = $quiz->calculateScore($quizResults, $quizResults['time']);
+		$calculatedResults = $calculateScore->handle($quiz, $quizResults);
+
+		$timeInMinutes = $changeTimeFormat->handle($quizResults['time']);
+
+		$finalResults = $saveQuizResults->handle($quiz, $timeInMinutes, $calculatedResults['score'], $calculatedResults['wrong_answers'], $quizResults);
 
 		return QuizResulResource::make($finalResults);
 	}
