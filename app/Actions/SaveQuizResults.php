@@ -5,7 +5,6 @@ namespace App\Actions;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SaveQuizResults
 {
@@ -17,8 +16,7 @@ class SaveQuizResults
 				'score'      => $score,
 			]);
 		} else {
-			DB::table('quiz_user')->insert([
-				'quiz_id'    => $quiz->id,
+			$quiz->users()->attach([null], [
 				'time_taken' => $timeInMinutes,
 				'score'      => $score,
 			]);
