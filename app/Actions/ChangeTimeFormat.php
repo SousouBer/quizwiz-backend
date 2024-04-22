@@ -8,15 +8,15 @@ class ChangeTimeFormat
 	{
 		$timeInMinutes = 0;
 
-		list($hours, $minutes) = explode(':', $time);
+		list($minutes, $seconds) = explode(':', $time);
 
-		$hours = intval($hours);
 		$minutes = intval($minutes);
+		$seconds = intval($seconds);
 
-		if ($minutes >= 30) {
-			$timeInMinutes = $hours + 1;
+		if ($seconds >= 30) {
+			$timeInMinutes = $minutes + 1;
 		} else {
-			$timeInMinutes = $hours;
+			$timeInMinutes = $minutes;
 		}
 
 		return $timeInMinutes;
