@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -10,15 +11,18 @@ class SaveQuizResults
 {
 	public function handle(Quiz $quiz, int $timeInMinutes, int $score, int $wrongAnswers, array $arr): array
 	{
-		$userId = Auth::id();
-
-		DB::table('quiz_user')->insert([
-			'user_id'    => $userId,
-			'quiz_id'    => $quiz->id,
-			'time_taken' => $timeInMinutes,
-			'score'      => $score,
-		]);
-
+		if (Auth::check()) {
+			User::findOrFail(Auth::id())->quizzes()->attach($quiz->id, [
+				'time_taken' => $timeInMinutes,
+				'score'      => $score,
+			]);
+		} else {
+			DB::table('quiz_user')->insert([
+				'quiz_id'    => $quiz->id,
+				'time_taken' => $timeInMinutes,
+				'score'      => $score,
+			]);
+		}
 		return [
 			'title'           => $quiz->title,
 			'time'            => $arr['time'],
