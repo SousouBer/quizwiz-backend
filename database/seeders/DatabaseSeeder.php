@@ -2,22 +2,43 @@
 
 namespace Database\Seeders;
 
+use App\Models\Answer;
+use App\Models\Category;
+use App\Models\DifficultyLevel;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-	/**
-	 * Seed the application's database.
-	 */
 	public function run(): void
 	{
-		// User::factory(10)->create();
+		$this->call([
+			CategorySeeder::class,
+			DifficultyLevelsSeeder::class,
+		]);
+
+		$categories = Category::all();
+		$difficultyLevels = DifficultyLevel::all();
+
+		foreach ($difficultyLevels as $difficultyLevel) {
+			for ($i = 0; $i < 6; $i++) {
+				Quiz::factory([
+					'difficulty_level_id' => $difficultyLevel->id,
+				])->has(
+					Question::factory(5)
+					->has(Answer::factory()->count(4))
+				)->afterCreating(function ($quiz) use ($categories) {
+					$quiz->categories()->attach($categories->random(rand(1, 5))->pluck('id'));
+				})->create();
+			}
+		}
 
 		User::factory()->create([
-			'name'  => 'Test User',
-			'email' => 'test@example.com',
+			'username'  => 'Test User',
+			'email'     => 'test@example.com',
 		]);
 	}
 }
