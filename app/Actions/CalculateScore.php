@@ -6,7 +6,7 @@ use App\Models\Quiz;
 
 class CalculateScore
 {
-	public function handle(Quiz $quiz, array $arr): array
+	public static function handle(Quiz $quiz, array $arr): array
 	{
 		$score = $quiz->answers->where('is_correct', true)->count();
 		$wrongAnswers = 0;

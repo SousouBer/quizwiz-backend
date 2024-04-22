@@ -4,7 +4,7 @@ namespace App\Actions;
 
 class ChangeTimeFormat
 {
-	public function handle(string $time): string
+	public static function handle(string $time): string
 	{
 		$timeInMinutes = 0;
 

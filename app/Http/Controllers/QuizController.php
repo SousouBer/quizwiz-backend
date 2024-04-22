@@ -23,17 +23,17 @@ class QuizController
 		return QuizResource::make($quiz);
 	}
 
-	public function store(QuizResultsRequest $request, CalculateScore $calculateScore, ChangeTimeFormat $changeTimeFormat, SaveQuizResults $saveQuizResults): QuizResulResource
+	public function store(QuizResultsRequest $request): QuizResulResource
 	{
 		$quizResults = $request->validated();
 
 		$quiz = Quiz::with('questions.answers')->findOrFail($quizResults['quiz_id']);
 
-		$calculatedResults = $calculateScore->handle($quiz, $quizResults);
+		$calculatedResults = CalculateScore::handle($quiz, $quizResults);
 
-		$timeInMinutes = $changeTimeFormat->handle($quizResults['time']);
+		$timeInMinutes = ChangeTimeFormat::handle($quizResults['time']);
 
-		$finalResults = $saveQuizResults->handle($quiz, $timeInMinutes, $calculatedResults['score'], $calculatedResults['wrong_answers'], $quizResults);
+		$finalResults = SaveQuizResults::handle($quiz, $timeInMinutes, $calculatedResults['score'], $calculatedResults['wrong_answers'], $quizResults);
 
 		return QuizResulResource::make($finalResults);
 	}
