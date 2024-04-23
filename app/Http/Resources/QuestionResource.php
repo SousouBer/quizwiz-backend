@@ -13,6 +13,7 @@ class QuestionResource extends JsonResource
 			'id'      => $this->id,
 			'text'    => $this->text,
 			'points'  => $this->answers()->where('is_correct', true)->count(),
+			'answers' => AnswerResource::collection($this->answers),
 		];
 	}
 }
