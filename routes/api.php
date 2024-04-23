@@ -32,3 +32,4 @@ Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
 Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->name('difficultyLevels.index');
 
 Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::post('/answers', [QuizController::class, 'store'])->name('answers.store');
