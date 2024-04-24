@@ -16,13 +16,14 @@ class QuizResource extends JsonResource
 			'categories'       => CategoryResource::collection($this->categories),
 			'difficulty_level' => $this->unless($request->route('quiz'), DifficultyLevelResource::make($this->DifficultyLevel)),
 			$this->mergeWhen($request->route('quiz'), [
-				'instructions'    => $this->instructions,
-				'questions'       => $this->questions->count(),
+				'instructions'          => $this->instructions,
+				'questions'             => $this->questions->count(),
+				'questions_and_answers' => QuestionResource::collection($this->questions),
 			]),
-			'image'            => $this->image,
-			'points'           => $this->answers()->where('is_correct', true)->count(),
-			'time'             => $this->time,
-			'plays'            => DB::table('quiz_user')
+			'image'                 => $this->image,
+			'points'                => $this->answers()->where('is_correct', true)->count(),
+			'time'                  => $this->time,
+			'plays'                 => DB::table('quiz_user')
 			->where('quiz_id', $this->id)
 			->count(),
 			$this->mergeWhen($request->user() !== null && $this->users->contains($request->user()), function () use ($request) {
