@@ -66,6 +66,7 @@ class Quiz extends Model
 	public function scopeLevelFilter(Builder $query, string $levelIDs): Builder
 	{
 		$levelIDsArray = explode(',', $levelIDs);
+
 		return $query->whereIn('difficulty_level_id', $levelIDsArray);
 	}
 

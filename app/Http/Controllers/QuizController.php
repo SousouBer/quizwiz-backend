@@ -23,7 +23,7 @@ class QuizController
 		$levelIDs = $filteringOptions['levels'] ?? null;
 		$search = $filteringOptions['search'] ?? null;
 		$myQuizzes = $filteringOptions['my_quizzes'] ?? null;
-		$notCompleted = $filteringOptions['completed_quizzes'] ?? null;
+		$notCompleted = $filteringOptions['not_completed_quizzes'] ?? null;
 
 		$quizzes = Quiz::query();
 
