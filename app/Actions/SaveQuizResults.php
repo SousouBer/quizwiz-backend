@@ -22,10 +22,11 @@ class SaveQuizResults
 			]);
 		}
 		return [
-			'title'           => $quiz->title,
-			'time'            => $arr['time'],
-			'correct_answers' => $score,
-			'wrong_answers'   => $wrongAnswers,
+			'title'            => $quiz->title,
+			'difficulty_level' => $quiz->difficultyLevel,
+			'time'             => $arr['time'],
+			'correct_answers'  => $score,
+			'wrong_answers'    => $wrongAnswers,
 		];
 	}
 }

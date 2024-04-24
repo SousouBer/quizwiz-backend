@@ -10,10 +10,11 @@ class QuizResulResource extends JsonResource
 	public function toArray(Request $request): array
 	{
 		return [
-			'title'           => $this['title'],
-			'time'            => $this['time'],
-			'correct_answers' => $this['correct_answers'],
-			'wrong_answers'   => $this['wrong_answers'],
+			'title'                  => $this['title'],
+			'difficulty_level'       => $this['difficulty_level'],
+			'time'                   => $this['time'],
+			'correct_answers'        => $this['correct_answers'],
+			'wrong_answers'          => $this['wrong_answers'],
 		];
 	}
 }
