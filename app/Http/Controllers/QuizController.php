@@ -9,15 +9,76 @@ use App\Http\Requests\QuizResultsRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class QuizController
 {
-	public function index(): AnonymousResourceCollection
+	public function index(Request $request): AnonymousResourceCollection
 	{
-		$quizzes = Quiz::paginate(9);
+		$categoryIDs = $request->query('categories');
+		$sort = $request->query('sort');
+		$levelIDs = $request->query('levels');
+		$search = $request->query('search');
 
-		return QuizResource::collection($quizzes);
+		$quizzes = Quiz::query();
+
+		if ($search) {
+			$quizzes->where(function ($query) use ($search) {
+				$query->where('title', 'like', '%' . $search . '%')
+					  ->orWhereHas('categories', function ($query) use ($search) {
+					  	$query->where('title', 'like', '%' . $search . '%');
+					  });
+			});
+		}
+
+		if ($categoryIDs) {
+			$categoryIdsArray = explode(',', $categoryIDs);
+
+			$quizzes->whereHas('categories', function ($query) use ($categoryIdsArray) {
+				$query->whereIn('categories.id', $categoryIdsArray);
+			});
+		}
+
+		if ($levelIDs) {
+			$levelIDsArray = explode(',', $levelIDs);
+			$quizzes->whereIn('difficulty_level_id', $levelIDsArray);
+		}
+
+		if ($sort) {
+			switch ($sort) {
+				case 'asc':
+					$quizzes->orderBy('title', 'asc');
+					break;
+				case 'desc':
+					$quizzes->orderBy('title', 'desc');
+					break;
+				case 'oldest':
+					$quizzes->oldest();
+					break;
+				case 'newest':
+					$quizzes->latest();
+					break;
+				case 'popular':
+					$quizzes->select('quizzes.*', DB::raw('COUNT(quiz_user.quiz_id) as plays'))
+					->leftJoin('quiz_user', 'quizzes.id', '=', 'quiz_user.quiz_id')
+					->groupBy('quizzes.id');
+
+					$quizzes->orderBy('plays', 'desc');
+					break;
+				default:
+					break;
+			}
+		}
+
+		// $filteredQuizzes = $quizzes->paginate(10);
+
+		// return QuizResource::collection($filteredQuizzes);
+
+		// $quizzes = Quiz::paginate(9);
+
+		return QuizResource::collection($quizzes->get());
 	}
 
 	public function show(Quiz $quiz): QuizResource
