@@ -6,79 +6,42 @@ use App\Actions\CalculateScore;
 use App\Actions\ChangeTimeFormat;
 use App\Actions\SaveQuizResults;
 use App\Http\Requests\QuizResultsRequest;
+use App\Http\Requests\QuizzesRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class QuizController
 {
-	public function index(Request $request): AnonymousResourceCollection
+	public function index(QuizzesRequest $request): AnonymousResourceCollection
 	{
-		$categoryIDs = $request->query('categories');
-		$sort = $request->query('sort');
-		$levelIDs = $request->query('levels');
-		$search = $request->query('search');
+		$filteringOptions = $request->validated();
+
+		$categoryIDs = $filteringOptions['categories'] ?? null;
+		$sort = $filteringOptions['sort'] ?? null;
+		$levelIDs = $filteringOptions['levels'] ?? null;
+		$search = $filteringOptions['search'] ?? null;
 
 		$quizzes = Quiz::query();
 
 		if ($search) {
-			$quizzes->where(function ($query) use ($search) {
-				$query->where('title', 'like', '%' . $search . '%')
-					  ->orWhereHas('categories', function ($query) use ($search) {
-					  	$query->where('title', 'like', '%' . $search . '%');
-					  });
-			});
+			$quizzes->searchFilter($search);
 		}
 
 		if ($categoryIDs) {
-			$categoryIdsArray = explode(',', $categoryIDs);
-
-			$quizzes->whereHas('categories', function ($query) use ($categoryIdsArray) {
-				$query->whereIn('categories.id', $categoryIdsArray);
-			});
+			$quizzes->categoryFilter($categoryIDs);
 		}
 
 		if ($levelIDs) {
-			$levelIDsArray = explode(',', $levelIDs);
-			$quizzes->whereIn('difficulty_level_id', $levelIDsArray);
+			$quizzes->levelFilter($levelIDs);
 		}
 
 		if ($sort) {
-			switch ($sort) {
-				case 'asc':
-					$quizzes->orderBy('title', 'asc');
-					break;
-				case 'desc':
-					$quizzes->orderBy('title', 'desc');
-					break;
-				case 'oldest':
-					$quizzes->oldest();
-					break;
-				case 'newest':
-					$quizzes->latest();
-					break;
-				case 'popular':
-					$quizzes->select('quizzes.*', DB::raw('COUNT(quiz_user.quiz_id) as plays'))
-					->leftJoin('quiz_user', 'quizzes.id', '=', 'quiz_user.quiz_id')
-					->groupBy('quizzes.id');
-
-					$quizzes->orderBy('plays', 'desc');
-					break;
-				default:
-					break;
-			}
+			$quizzes->sort($sort);
 		}
 
-		// $filteredQuizzes = $quizzes->paginate(10);
-
-		// return QuizResource::collection($filteredQuizzes);
-
-		// $quizzes = Quiz::paginate(9);
-
-		return QuizResource::collection($quizzes->get());
+		return QuizResource::collection($quizzes->paginate(9));
 	}
 
 	public function show(Quiz $quiz): QuizResource
