@@ -96,4 +96,18 @@ class Quiz extends Model
 				break;
 		}
 	}
+
+	public function scopeCompletedQuizzes(Builder $query): Builder
+	{
+		return $query->whereHas('users', function ($query) {
+			$query->where('user_id', auth()->user()->id);
+		});
+	}
+
+	public function scopeIncompletedQuizzes(Builder $query): Builder
+	{
+		return $query->whereDoesntHave('users', function ($query) {
+			$query->where('user_id', auth()->user()->id);
+		});
+	}
 }

@@ -22,6 +22,8 @@ class QuizController
 		$sort = $filteringOptions['sort'] ?? null;
 		$levelIDs = $filteringOptions['levels'] ?? null;
 		$search = $filteringOptions['search'] ?? null;
+		$myQuizzes = $filteringOptions['my_quizzes'] ?? null;
+		$notCompleted = $filteringOptions['completed_quizzes'] ?? null;
 
 		$quizzes = Quiz::query();
 
@@ -39,6 +41,14 @@ class QuizController
 
 		if ($sort) {
 			$quizzes->sort($sort);
+		}
+
+		if ($myQuizzes xor $notCompleted) {
+			if ($myQuizzes) {
+				$quizzes->completedQuizzes();
+			} else {
+				$quizzes->incompletedQuizzes();
+			}
 		}
 
 		return QuizResource::collection($quizzes->paginate(9));

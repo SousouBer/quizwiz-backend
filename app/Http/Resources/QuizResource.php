@@ -14,8 +14,8 @@ class QuizResource extends JsonResource
 			'id'               => $this->id,
 			'title'            => $this->title,
 			'categories'       => CategoryResource::collection($this->categories),
-			'difficulty_level' => $this->unless($request->route('id'), DifficultyLevelResource::make($this->DifficultyLevel)),
-			$this->mergeWhen($request->route('id'), [
+			'difficulty_level' => $this->unless($request->route('quiz'), DifficultyLevelResource::make($this->DifficultyLevel)),
+			$this->mergeWhen($request->route('quiz'), [
 				'instructions'    => $this->instructions,
 				'questions'       => $this->questions->count(),
 			]),
@@ -25,6 +25,13 @@ class QuizResource extends JsonResource
 			'plays'            => DB::table('quiz_user')
 			->where('quiz_id', $this->id)
 			->count(),
+			$this->mergeWhen($request->user() !== null && $this->users->contains($request->user()), function () use ($request) {
+				$user = $this->users->firstWhere('id', $request->user()->id);
+
+				if ($user) {
+					return ['results' => $user->pivot];
+				}
+			}),
 		];
 	}
 }
