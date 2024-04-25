@@ -6,6 +6,7 @@ use App\Actions\CalculateScore;
 use App\Actions\ChangeTimeFormat;
 use App\Actions\SaveQuizResults;
 use App\Http\Requests\QuizResultsRequest;
+use App\Http\Requests\QuizzesRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
@@ -13,11 +14,44 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuizController
 {
-	public function index(): AnonymousResourceCollection
+	public function index(QuizzesRequest $request): AnonymousResourceCollection
 	{
-		$quizzes = Quiz::paginate(9);
+		$filteringOptions = $request->validated();
 
-		return QuizResource::collection($quizzes);
+		$categoryIDs = $filteringOptions['categories'] ?? null;
+		$sort = $filteringOptions['sort'] ?? null;
+		$levelIDs = $filteringOptions['levels'] ?? null;
+		$search = $filteringOptions['search'] ?? null;
+		$myQuizzes = $filteringOptions['my_quizzes'] ?? null;
+		$notCompleted = $filteringOptions['not_completed_quizzes'] ?? null;
+
+		$quizzes = Quiz::query();
+
+		if ($search) {
+			$quizzes->searchFilter($search);
+		}
+
+		if ($categoryIDs) {
+			$quizzes->categoryFilter($categoryIDs);
+		}
+
+		if ($levelIDs) {
+			$quizzes->levelFilter($levelIDs);
+		}
+
+		if ($sort) {
+			$quizzes->sort($sort);
+		}
+
+		if ($myQuizzes xor $notCompleted) {
+			if ($myQuizzes) {
+				$quizzes->completedQuizzes();
+			} else {
+				$quizzes->incompletedQuizzes();
+			}
+		}
+
+		return QuizResource::collection($quizzes->paginate(9));
 	}
 
 	public function show(Quiz $quiz): QuizResource
