@@ -13,8 +13,16 @@ class QuizzesRequest extends FormRequest
 			'levels'                => 'nullable|string',
 			'sort'                  => 'nullable|string',
 			'search'                => 'nullable|string',
-			'my_quizzes'            => 'nullable|string',
-			'not_completed_quizzes' => 'nullable|string',
+			'my_quizzes'            => 'nullable|boolean',
+			'not_completed_quizzes' => 'nullable|boolean',
 		];
+	}
+
+	public function prepareForValidation(): void
+	{
+		$this->merge([
+			'my_quizzes'            => $this->boolean('my_quizzes'),
+			'not_completed_quizzes' => $this->boolean('not_completed_quizzes'),
+		]);
 	}
 }
