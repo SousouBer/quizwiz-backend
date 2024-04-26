@@ -73,4 +73,11 @@ class QuizController
 
 		return QuizResulResource::make($finalResults);
 	}
+
+	public function similarQuizzes(Quiz $quiz): AnonymousResourceCollection
+	{
+		$quizzes = Quiz::query()->similarQuizzes($quiz)->get()->shuffle()->take(3);
+
+		return QuizResource::collection($quizzes);
+	}
 }

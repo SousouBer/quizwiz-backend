@@ -21,7 +21,7 @@ class Quiz extends Model
 
 	public function users(): BelongsToMany
 	{
-		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score');
+		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score')->withTimestamps();
 	}
 
 	public function categories(): BelongsToMany
@@ -109,6 +109,17 @@ class Quiz extends Model
 	{
 		return $query->whereDoesntHave('users', function ($query) {
 			$query->where('user_id', auth()->user()->id);
+		});
+	}
+
+	public function scopeSimilarQuizzes(Builder $query, Quiz $quiz): Builder
+	{
+		return $query->where(function ($quizQuery) use ($quiz) {
+			$quizQuery->where('id', '!=', $quiz->id)->whereHas('categories', function ($relationQuery) use ($quiz) {
+				$relationQuery->whereIn('categories.id', $quiz->categories->pluck('id'));
+			})->whereDoesntHave('users', function ($relationQuery) {
+				$relationQuery->where('user_id', auth()->user()->id);
+			});
 		});
 	}
 }
