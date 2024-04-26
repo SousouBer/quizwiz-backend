@@ -10,7 +10,6 @@ use App\Http\Requests\QuizzesRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuizController
@@ -75,7 +74,7 @@ class QuizController
 		return QuizResulResource::make($finalResults);
 	}
 
-	public function similarQuizzes(Request $request, Quiz $quiz): AnonymousResourceCollection
+	public function similarQuizzes(Quiz $quiz): AnonymousResourceCollection
 	{
 		$quizzes = Quiz::query()->similarQuizzes($quiz)->get()->shuffle()->take(3);
 
