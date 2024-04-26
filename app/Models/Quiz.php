@@ -21,7 +21,7 @@ class Quiz extends Model
 
 	public function users(): BelongsToMany
 	{
-		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score');
+		return $this->belongsToMany(User::class)->withPivot('time_taken', 'score')->withTimestamps();
 	}
 
 	public function categories(): BelongsToMany

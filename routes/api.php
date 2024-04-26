@@ -33,3 +33,4 @@ Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->n
 
 Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 Route::post('/answers', [QuizController::class, 'store'])->name('answers.store');
+Route::get('/similar-quizzes/{quiz}', [QuizController::class, 'similarQuizzes'])->name('quizzes.similar_quizzes');

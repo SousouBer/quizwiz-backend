@@ -10,6 +10,7 @@ use App\Http\Requests\QuizzesRequest;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class QuizController
@@ -72,5 +73,21 @@ class QuizController
 		$finalResults = SaveQuizResults::handle($quiz, $timeInMinutes, $calculatedResults['score'], $calculatedResults['wrong_answers'], $quizResults);
 
 		return QuizResulResource::make($finalResults);
+	}
+
+	public function similarQuizzes(Request $request, Quiz $quiz)
+	{
+		$quizCategories = $quiz->categories->pluck('id');
+		$quizzes = Quiz::where(function ($query) use ($quiz) {
+			$query->where('id', '!=', $quiz->id)->whereHas('categories', function ($relationQuery) use ($quiz) {
+				$relationQuery->whereIn('categories.id', $quiz->categories->pluck('id'));
+			})->whereDoesntHave('users', function ($relationQuery) {
+				$relationQuery->where('user_id', auth()->user()->id);
+			});
+		})
+		->take(3)
+		->get();
+
+		return QuizResource::collection($quizzes);
 	}
 }
