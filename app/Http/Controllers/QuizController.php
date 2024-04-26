@@ -77,16 +77,7 @@ class QuizController
 
 	public function similarQuizzes(Request $request, Quiz $quiz)
 	{
-		$quizCategories = $quiz->categories->pluck('id');
-		$quizzes = Quiz::where(function ($query) use ($quiz) {
-			$query->where('id', '!=', $quiz->id)->whereHas('categories', function ($relationQuery) use ($quiz) {
-				$relationQuery->whereIn('categories.id', $quiz->categories->pluck('id'));
-			})->whereDoesntHave('users', function ($relationQuery) {
-				$relationQuery->where('user_id', auth()->user()->id);
-			});
-		})
-		->take(3)
-		->get();
+		$quizzes = Quiz::query()->similarQuizzes($quiz)->get()->shuffle()->take(3);
 
 		return QuizResource::collection($quizzes);
 	}
