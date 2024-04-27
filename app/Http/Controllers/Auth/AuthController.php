@@ -27,8 +27,9 @@ class AuthController extends Controller
 	public function login(LoginRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
+		$remember = $credentials['remember'] ?? false;
 
-		if (Auth::attempt($credentials)) {
+		if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $remember)) {
 			$request->session()->regenerate();
 
 			return response()->json(['title' => 'Login Success', 'message' => 'Your have successfully logged in.'], 200);
