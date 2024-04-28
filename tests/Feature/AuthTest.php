@@ -2,12 +2,27 @@
 
 namespace Tests\Feature;
 
+use App\Actions\EmailVerificationUrl;
+use App\Models\User;
+use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
 	use RefreshDatabase;
+
+	private User $user;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		$this->user = User::factory()->create([
+			'email_verified_at' => null,
+		]);
+	}
 
 	public function test_auth_should_give_us_errors_if_no_inputs_are_provided(): void
 	{
@@ -111,5 +126,48 @@ class AuthTest extends TestCase
 				'username',
 			]
 		);
+	}
+
+	public function test_auth_user_has_been_successfully_registered_and_stored_in_database()
+	{
+		$newUser = User::factory()->make();
+
+		$response = $this->post(route('register'), [
+			'username'                           => $newUser->username,
+			'email'                              => $newUser->email,
+			'password'                           => 'password',
+			'password_confirmation'              => 'password',
+		]);
+
+		$response->assertSuccessful();
+
+		$registeredUser = User::Firstwhere('email', $newUser->email);
+
+		$this->assertDatabaseHas('users', ['username' => $registeredUser->username]);
+	}
+
+	public function test_user_email_verification_link_has_been_successfully_sent()
+	{
+		Notification::fake();
+
+		$newUser = User::factory()->create(['email_verified_at' => null]);
+
+		$response = $this->post(route('email.resend_verification', ['email' => $newUser->email]));
+
+		Notification::assertSentTo($newUser, VerifyEmail::class);
+
+		$response->assertSuccessful();
+	}
+
+	public function test_user_email_has_been_successfully_verified()
+	{
+		$newUser = User::factory()->create(['email_verified_at' => null]);
+
+		$emailVerificationUrl = new EmailVerificationUrl();
+		$verificationUrl = $emailVerificationUrl->handle($newUser);
+
+		$this->actingAs($newUser)->get($verificationUrl);
+
+		$this->assertTrue(User::find($newUser->id)->hasVerifiedEmail());
 	}
 }
