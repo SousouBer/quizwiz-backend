@@ -37,7 +37,7 @@ class RegisterTest extends TestCase
 		);
 	}
 
-	public function test_register_should_give_us_errors_if_username_is_not_provided()
+	public function test_register_should_give_us_errors_if_username_is_not_provided(): void
 	{
 		$response = $this->post(route('register'), [
 			'email'                              => 'test@mail.com',
@@ -60,7 +60,7 @@ class RegisterTest extends TestCase
 		);
 	}
 
-	public function test_register_should_give_us_errors_if_email_is_not_provided()
+	public function test_register_should_give_us_errors_if_email_is_not_provided(): void
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -83,7 +83,7 @@ class RegisterTest extends TestCase
 		);
 	}
 
-	public function test_register_should_give_us_errors_if_password_is_not_provided()
+	public function test_register_should_give_us_errors_if_password_is_not_provided(): void
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -106,7 +106,7 @@ class RegisterTest extends TestCase
 		);
 	}
 
-	public function test_register_should_give_us_errors_if_password_confirmation_is_not_provided()
+	public function test_register_should_give_us_errors_if_password_confirmation_is_not_provided(): void
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -128,7 +128,7 @@ class RegisterTest extends TestCase
 		);
 	}
 
-	public function test_register_user_has_been_successfully_registered_and_stored_in_database()
+	public function test_register_user_has_been_successfully_registered_and_stored_in_database(): void
 	{
 		$newUser = User::factory()->make();
 
@@ -146,7 +146,7 @@ class RegisterTest extends TestCase
 		$this->assertDatabaseHas('users', ['username' => $registeredUser->username]);
 	}
 
-	public function test_user_email_verification_link_has_been_successfully_sent()
+	public function test_user_email_verification_link_has_been_successfully_sent(): void
 	{
 		Notification::fake();
 
@@ -159,7 +159,7 @@ class RegisterTest extends TestCase
 		$response->assertSuccessful();
 	}
 
-	public function test_user_email_has_been_successfully_verified()
+	public function test_user_email_has_been_successfully_verified(): void
 	{
 		$newUser = User::factory()->create(['email_verified_at' => null]);
 
