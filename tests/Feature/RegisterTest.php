@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
-class AuthTest extends TestCase
+class RegisterTest extends TestCase
 {
 	use RefreshDatabase;
 
@@ -24,7 +24,7 @@ class AuthTest extends TestCase
 		]);
 	}
 
-	public function test_auth_should_give_us_errors_if_no_inputs_are_provided(): void
+	public function test_register_should_give_us_errors_if_no_inputs_are_provided(): void
 	{
 		$response = $this->post(route('register'));
 
@@ -37,7 +37,7 @@ class AuthTest extends TestCase
 		);
 	}
 
-	public function test_auth_should_give_us_errors_if_username_is_not_provided()
+	public function test_register_should_give_us_errors_if_username_is_not_provided()
 	{
 		$response = $this->post(route('register'), [
 			'email'                              => 'test@mail.com',
@@ -60,7 +60,7 @@ class AuthTest extends TestCase
 		);
 	}
 
-	public function test_auth_should_give_us_errors_if_email_is_not_provided()
+	public function test_register_should_give_us_errors_if_email_is_not_provided()
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -83,7 +83,7 @@ class AuthTest extends TestCase
 		);
 	}
 
-	public function test_auth_should_give_us_errors_if_password_is_not_provided()
+	public function test_register_should_give_us_errors_if_password_is_not_provided()
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -106,7 +106,7 @@ class AuthTest extends TestCase
 		);
 	}
 
-	public function test_auth_should_give_us_errors_if_password_confirmation_is_not_provided()
+	public function test_register_should_give_us_errors_if_password_confirmation_is_not_provided()
 	{
 		$response = $this->post(route('register'), [
 			'username'                              => 'username',
@@ -128,7 +128,7 @@ class AuthTest extends TestCase
 		);
 	}
 
-	public function test_auth_user_has_been_successfully_registered_and_stored_in_database()
+	public function test_register_user_has_been_successfully_registered_and_stored_in_database()
 	{
 		$newUser = User::factory()->make();
 
