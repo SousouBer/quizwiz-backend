@@ -11,19 +11,16 @@ class ContactResource extends JsonResource
 {
 	public function toArray(Request $request): array
 	{
-		$quizzesCount = Quiz::count();
-		$categoriesCount = Category::count();
-
-		$roundedQuizzesCount = ceil($quizzesCount / 5) * 5 - 5;
-		$roundedCategoriesCount = ceil($categoriesCount / 5) * 5 - 5;
+		$quizzesCount = Quiz::count() - 1;
+		$categoriesCount = Category::count() - 1;
 
 		return [
 			'email'            => $this->email,
 			'tel'              => $this->tel,
 			'facebook'         => $this->facebook,
 			'linkedin'         => $this->linkedin,
-			'quizzes_count'    => $roundedQuizzesCount,
-			'categories_count' => $roundedCategoriesCount,
+			'quizzes_count'    => $quizzesCount === -1 ? 0 : $quizzesCount,
+			'categories_count' => $categoriesCount === -1 ? 0 : $categoriesCount,
 		];
 	}
 }
