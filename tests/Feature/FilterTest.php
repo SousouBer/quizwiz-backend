@@ -65,4 +65,18 @@ class FilterTest extends TestCase
 			$this->assertTrue(in_array($quiz['difficulty_level']['id'], $levelIDs));
 		}
 	}
+
+	public function test_filter_quizzes_are_successfully_sorted_descending(): void
+	{
+		$response = $this->json('GET', route('quizzes.index'), ['sort' => 'desc']);
+
+		$response->assertSuccessful();
+
+		$quizTitles = array_map(fn ($quiz) => $quiz['title'], $response->json('data'));
+
+		$descendingTitles = $quizTitles;
+		rsort($descendingTitles);
+
+		$this->assertEquals($quizTitles, $descendingTitles);
+	}
 }
