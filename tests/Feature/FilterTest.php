@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Answer;
 use App\Models\Category;
 use App\Models\DifficultyLevel;
 use App\Models\Quiz;
@@ -171,13 +172,14 @@ class FilterTest extends TestCase
 	{
 		$this->actingAs($this->user);
 
+		$mockAnswers = Answer::inRandomOrder()->take(rand(1, 10))->pluck('id')->toArray();
+		$mockTime = '2:00';
+
 		// Mock an authenticated user submitting the quiz results.
 		$response = $this->json('POST', route('answers.store'), [
 			'quiz_id'    => Quiz::first()->id,
-			'time'       => '2:00',
-			'answers'    => [
-				1, 2, 3, 4, 5, 6, 7, 8, 9,
-			],
+			'time'       => $mockTime,
+			'answers'    => $mockAnswers,
 		]);
 
 		$response->assertSuccessful();
@@ -201,13 +203,14 @@ class FilterTest extends TestCase
 	{
 		$this->actingAs($this->user);
 
+		$mockAnswers = Answer::inRandomOrder()->take(rand(1, 10))->pluck('id')->toArray();
+		$mockTime = '2:00';
+
 		// Mock an authenticated user submitting the quiz results.
 		$response = $this->json('POST', route('answers.store'), [
 			'quiz_id'    => Quiz::first()->id,
-			'time'       => '2:00',
-			'answers'    => [
-				1, 2, 3, 4, 5, 6, 7, 8, 9,
-			],
+			'time'       => $mockTime,
+			'answers'    => $mockAnswers,
 		]);
 
 		$response->assertSuccessful();
