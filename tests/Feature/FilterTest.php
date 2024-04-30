@@ -121,4 +121,30 @@ class FilterTest extends TestCase
 
 		$this->assertEquals($quizCreationDates, $newestDates);
 	}
+
+	public function test_filter_quizzes_are_successfully_filtered_that_include_search_value(): void
+	{
+		$searchValue = 'science';
+
+		$response = $this->json('GET', route('quizzes.index'), ['search' => $searchValue]);
+
+		$response->assertSuccessful();
+
+		$quizzes = $response->json('data');
+
+		foreach ($quizzes as $quiz) {
+			$valueInQuizTitle = stripos($quiz['title'], $searchValue) ?? false;
+
+			$valueInCategoryTitle = false;
+
+			foreach ($quiz['categories'] as $category) {
+				if (stripos($category['title'], $searchValue) !== false) {
+					$valueInCategoryTitle = true;
+					break;
+				}
+			}
+
+			$this->assertTrue($valueInQuizTitle || $valueInCategoryTitle);
+		}
+	}
 }
