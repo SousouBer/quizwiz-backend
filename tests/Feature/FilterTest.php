@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Category;
 use App\Models\DifficultyLevel;
 use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,11 +13,15 @@ class FilterTest extends TestCase
 {
 	use RefreshDatabase;
 
+	private User $user;
+
 	protected function setUp(): void
 	{
 		parent::setUp();
 
 		$this->seed();
+
+		$this->user = User::factory()->create();
 	}
 
 	public function test_filter_returns_quizzes_successfully_if_no_filter_option_is_selected(): void
@@ -160,5 +165,63 @@ class FilterTest extends TestCase
 		sort($quizPlaysSorted);
 
 		$this->assertEquals($quizPlaysCount, $quizPlaysSorted);
+	}
+
+	public function test_filter_quizzes_are_successfully_filtered_when_user_checks_their_completed_quizzes(): void
+	{
+		$this->actingAs($this->user);
+
+		// Mock an authenticated user submitting the quiz results.
+		$response = $this->json('POST', route('answers.store'), [
+			'quiz_id'    => Quiz::first()->id,
+			'time'       => '2:00',
+			'answers'    => [
+				1, 2, 3, 4, 5, 6, 7, 8, 9,
+			],
+		]);
+
+		$response->assertSuccessful();
+
+		$this->user->refresh();
+
+		$response = $this->json('GET', route('quizzes.index'), ['my_quizzes' => true]);
+
+		$response->assertSuccessful();
+
+		$response->assertJsonStructure([
+			'data' => [
+				'*' => [
+					'results',
+				],
+			],
+		]);
+	}
+
+	public function test_filter_quizzes_are_successfully_filtered_when_user_checks_not_completed_quizzes(): void
+	{
+		$this->actingAs($this->user);
+
+		// Mock an authenticated user submitting the quiz results.
+		$response = $this->json('POST', route('answers.store'), [
+			'quiz_id'    => Quiz::first()->id,
+			'time'       => '2:00',
+			'answers'    => [
+				1, 2, 3, 4, 5, 6, 7, 8, 9,
+			],
+		]);
+
+		$response->assertSuccessful();
+
+		$this->user->refresh();
+
+		$response = $this->json('GET', route('quizzes.index'), ['not_completed_quizzes' => true]);
+
+		$response->assertSuccessful();
+
+		$quizzes = $response->json('data');
+
+		foreach ($quizzes as $quiz) {
+			$this->assertFalse($quiz['results'] ?? false);
+		}
 	}
 }
