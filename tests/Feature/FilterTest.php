@@ -147,4 +147,18 @@ class FilterTest extends TestCase
 			$this->assertTrue($valueInQuizTitle || $valueInCategoryTitle);
 		}
 	}
+
+	public function test_filter_quizzes_are_successfully_sorted_using_most_popular(): void
+	{
+		$response = $this->json('GET', route('quizzes.index'), ['sort' => 'popular']);
+
+		$response->assertSuccessful();
+
+		$quizPlaysCount = array_map(fn ($quiz) => $quiz['plays'], $response->json('data'));
+
+		$quizPlaysSorted = $quizPlaysCount;
+		sort($quizPlaysSorted);
+
+		$this->assertEquals($quizPlaysCount, $quizPlaysSorted);
+	}
 }
