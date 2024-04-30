@@ -14,8 +14,8 @@ class EnsureEmailIsVerified
 	{
 		$user = User::firstWhere('email', $request->only('email'));
 
-		if (!$user->hasVerifiedEmail()) {
-			return response()->json(['message' => 'Your email address is not verified.'], 409);
+		if ($user && !$user->hasVerifiedEmail()) {
+			return response()->json(['title' => 'Unverified Email', 'message' => 'Your email address is not verified. Check your inbox.'], 409);
 		}
 
 		return $next($request);
