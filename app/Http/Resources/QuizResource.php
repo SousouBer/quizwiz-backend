@@ -33,6 +33,7 @@ class QuizResource extends JsonResource
 					return ['results' => $user->pivot];
 				}
 			}),
+			'created_at' => $this->created_at->format('Y-m-d H:i:s'),
 		];
 	}
 }

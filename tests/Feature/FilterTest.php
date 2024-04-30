@@ -93,4 +93,32 @@ class FilterTest extends TestCase
 
 		$this->assertEquals($quizTitles, $descendingTitles);
 	}
+
+	public function test_filter_quizzes_are_successfully_sorted_oldest(): void
+	{
+		$response = $this->json('GET', route('quizzes.index'), ['sort' => 'oldest']);
+
+		$response->assertSuccessful();
+
+		$quizCreationDates = array_map(fn ($quiz) => $quiz['created_at'], $response->json('data'));
+
+		$oldestDates = $quizCreationDates;
+		sort($oldestDates);
+
+		$this->assertEquals($quizCreationDates, $oldestDates);
+	}
+
+	public function test_filter_quizzes_are_successfully_sorted_newest(): void
+	{
+		$response = $this->json('GET', route('quizzes.index'), ['sort' => 'newest']);
+
+		$response->assertSuccessful();
+
+		$quizCreationDates = array_map(fn ($quiz) => $quiz['created_at'], $response->json('data'));
+
+		$newestDates = $quizCreationDates;
+		rsort($newestDates);
+
+		$this->assertEquals($quizCreationDates, $newestDates);
+	}
 }
