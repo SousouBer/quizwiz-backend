@@ -79,4 +79,18 @@ class FilterTest extends TestCase
 
 		$this->assertEquals($quizTitles, $descendingTitles);
 	}
+
+	public function test_filter_quizzes_are_successfully_sorted_ascending(): void
+	{
+		$response = $this->json('GET', route('quizzes.index'), ['sort' => 'asc']);
+
+		$response->assertSuccessful();
+
+		$quizTitles = array_map(fn ($quiz) => $quiz['title'], $response->json('data'));
+
+		$descendingTitles = $quizTitles;
+		asort($descendingTitles);
+
+		$this->assertEquals($quizTitles, $descendingTitles);
+	}
 }
