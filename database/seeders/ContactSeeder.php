@@ -13,10 +13,10 @@ class ContactSeeder extends Seeder
 		$contacts = Config::get('contacts.contacts');
 
 		Contact::create([
-			'email'    => $contacts['email'],
-			'tel'      => $contacts['tel'],
-			'facebook' => $contacts['facebook'],
-			'linkedin' => $contacts['linkedin'],
+			'email'          => $contacts['email'],
+			'telephone'      => $contacts['telephone'],
+			'facebook'       => $contacts['facebook'],
+			'linkedin'       => $contacts['linkedin'],
 		]);
 	}
 }

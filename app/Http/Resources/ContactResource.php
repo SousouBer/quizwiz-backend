@@ -15,12 +15,12 @@ class ContactResource extends JsonResource
 		$categoriesCount = Category::count() - 1;
 
 		return [
-			'email'            => $this->email,
-			'tel'              => $this->tel,
-			'facebook'         => $this->facebook,
-			'linkedin'         => $this->linkedin,
-			'quizzes_count'    => $quizzesCount === -1 ? 0 : $quizzesCount,
-			'categories_count' => $categoriesCount === -1 ? 0 : $categoriesCount,
+			'email'                  => $this->email,
+			'telephone'              => $this->telephone,
+			'facebook'               => $this->facebook,
+			'linkedin'               => $this->linkedin,
+			'quizzes_count'          => $quizzesCount === -1 ? 0 : $quizzesCount,
+			'categories_count'       => $categoriesCount === -1 ? 0 : $categoriesCount,
 		];
 	}
 }
