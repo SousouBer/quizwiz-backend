@@ -227,4 +227,22 @@ class FilterTest extends TestCase
 			$this->assertFalse($quiz['results'] ?? false);
 		}
 	}
+
+	public function test_filter_similar_quizzes_are_successfully_received(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->actingAs($this->user)->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$response->assertSuccessful();
+
+		foreach ($quizzes as $similarQuiz) {
+			$selectedQuizCategoryIds = array_column($quiz['categories']->toArray(), 'id');
+			$similarQuizCategoryIds = array_column($similarQuiz['categories'], 'id');
+
+			$this->assertTrue(!empty(array_intersect($similarQuizCategoryIds, $selectedQuizCategoryIds)));
+		}
+	}
 }
