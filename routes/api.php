@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DifficultyLevelController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Http\Request;
@@ -34,3 +35,5 @@ Route::get('/difficulty-levels', [DifficultyLevelController::class, 'index'])->n
 Route::get('/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 Route::post('/answers', [QuizController::class, 'store'])->name('answers.store');
 Route::get('/similar-quizzes/{quiz}', [QuizController::class, 'similarQuizzes'])->name('quizzes.similar_quizzes');
+
+Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');

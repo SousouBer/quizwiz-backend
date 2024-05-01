@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
 		$this->call([
 			CategorySeeder::class,
 			DifficultyLevelsSeeder::class,
+			ContactSeeder::class,
 		]);
 
 		$categories = Category::all();
