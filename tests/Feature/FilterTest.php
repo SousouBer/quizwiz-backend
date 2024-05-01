@@ -256,6 +256,10 @@ class FilterTest extends TestCase
 
 		$this->assertCount(3, $quizzes);
 
+		foreach ($quizzes as $similarQuiz) {
+			$this->assertArrayNotHasKey('results', $similarQuiz);
+		}
+
 		$similarQuizIDs = array_map(fn ($quiz) => $quiz['id'], $quizzes);
 		$sortedIDs = $similarQuizIDs;
 		sort($sortedIDs);
