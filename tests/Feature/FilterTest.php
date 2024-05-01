@@ -245,4 +245,21 @@ class FilterTest extends TestCase
 			$this->assertTrue(!empty(array_intersect($similarQuizCategoryIds, $selectedQuizCategoryIds)));
 		}
 	}
+
+	public function test_filter_if_user_is_logged_they_succesfully_get_first_three_similar_uncompleted_quizzes(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->actingAs($this->user)->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$this->assertCount(3, $quizzes);
+
+		$similarQuizIDs = array_map(fn ($quiz) => $quiz['id'], $quizzes);
+		$sortedIDs = $similarQuizIDs;
+		sort($sortedIDs);
+
+		$this->assertEquals($similarQuizIDs, $sortedIDs);
+	}
 }

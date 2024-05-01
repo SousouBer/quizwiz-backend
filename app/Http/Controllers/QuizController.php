@@ -80,7 +80,7 @@ class QuizController
 		$quizzes = Quiz::query()->similarQuizzes($quiz)->get();
 
 		if (!Auth::check()) {
-			$quizzes->shuffle();
+			$quizzes = $quizzes->shuffle();
 		}
 
 		return QuizResource::collection($quizzes->take(3));
