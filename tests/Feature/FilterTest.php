@@ -262,4 +262,22 @@ class FilterTest extends TestCase
 
 		$this->assertEquals($similarQuizIDs, $sortedIDs);
 	}
+
+	public function test_filter_if_user_is_not_logged_in_they_get_random_three_similar(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$this->assertCount(3, $quizzes);
+
+		$similarQuizIDs = array_map(fn ($quiz) => $quiz['id'], $quizzes);
+
+		$sortedIDs = $similarQuizIDs;
+		sort($sortedIDs);
+
+		$this->assertNotEquals($similarQuizIDs, $sortedIDs);
+	}
 }
