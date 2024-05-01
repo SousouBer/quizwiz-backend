@@ -17,7 +17,7 @@ class Quiz extends Model
 
 	protected $guarded = ['id'];
 
-	protected $hidden = ['created_at', 'updated_at', 'difficulty_level_id', 'pivot'];
+	protected $hidden = ['updated_at', 'difficulty_level_id', 'pivot'];
 
 	public function users(): BelongsToMany
 	{
