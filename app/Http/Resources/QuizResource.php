@@ -20,7 +20,7 @@ class QuizResource extends JsonResource
 				'questions'             => $this->questions->count(),
 				'questions_and_answers' => QuestionResource::collection($this->questions),
 			]),
-			'image'                 => $this->image,
+			'image'                 => str_starts_with($this->image, 'https') ? $this->image : asset('storage/' . $this->image),
 			'points'                => $this->answers()->where('is_correct', true)->count(),
 			'time'                  => $this->time,
 			'plays'                 => DB::table('quiz_user')
