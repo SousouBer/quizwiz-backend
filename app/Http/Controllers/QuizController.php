@@ -11,6 +11,7 @@ use App\Http\Resources\QuizResource;
 use App\Http\Resources\QuizResulResource;
 use App\Models\Quiz;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class QuizController
 {
@@ -76,8 +77,12 @@ class QuizController
 
 	public function similarQuizzes(Quiz $quiz): AnonymousResourceCollection
 	{
-		$quizzes = Quiz::query()->similarQuizzes($quiz)->get()->shuffle()->take(3);
+		$quizzes = Quiz::query()->similarQuizzes($quiz)->get();
 
-		return QuizResource::collection($quizzes);
+		if (!Auth::check()) {
+			$quizzes = $quizzes->shuffle();
+		}
+
+		return QuizResource::collection($quizzes->take(3));
 	}
 }

@@ -227,4 +227,61 @@ class FilterTest extends TestCase
 			$this->assertFalse($quiz['results'] ?? false);
 		}
 	}
+
+	public function test_filter_similar_quizzes_are_successfully_received(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->actingAs($this->user)->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$response->assertSuccessful();
+
+		foreach ($quizzes as $similarQuiz) {
+			$selectedQuizCategoryIds = array_column($quiz['categories']->toArray(), 'id');
+			$similarQuizCategoryIds = array_column($similarQuiz['categories'], 'id');
+
+			$this->assertTrue(!empty(array_intersect($similarQuizCategoryIds, $selectedQuizCategoryIds)));
+		}
+	}
+
+	public function test_filter_if_user_is_logged_they_succesfully_get_first_three_similar_uncompleted_quizzes(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->actingAs($this->user)->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$this->assertCount(3, $quizzes);
+
+		foreach ($quizzes as $similarQuiz) {
+			$this->assertArrayNotHasKey('results', $similarQuiz);
+		}
+
+		$similarQuizIDs = array_map(fn ($quiz) => $quiz['id'], $quizzes);
+		$sortedIDs = $similarQuizIDs;
+		sort($sortedIDs);
+
+		$this->assertEquals($similarQuizIDs, $sortedIDs);
+	}
+
+	public function test_filter_if_user_is_not_logged_in_they_get_random_three_similar(): void
+	{
+		$quiz = Quiz::inRandomOrder()->firstOrFail();
+
+		$response = $this->json('GET', route('quizzes.similar_quizzes', ['quiz' => $quiz->id]));
+
+		$quizzes = $response->json('data');
+
+		$this->assertCount(3, $quizzes);
+
+		$similarQuizIDs = array_map(fn ($quiz) => $quiz['id'], $quizzes);
+
+		$sortedIDs = $similarQuizIDs;
+		sort($sortedIDs);
+
+		$this->assertNotEquals($similarQuizIDs, $sortedIDs);
+	}
 }

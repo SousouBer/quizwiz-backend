@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Quiz extends Model
@@ -117,9 +118,13 @@ class Quiz extends Model
 		return $query->where(function ($quizQuery) use ($quiz) {
 			$quizQuery->where('id', '!=', $quiz->id)->whereHas('categories', function ($relationQuery) use ($quiz) {
 				$relationQuery->whereIn('categories.id', $quiz->categories->pluck('id'));
-			})->whereDoesntHave('users', function ($relationQuery) {
-				$relationQuery->where('user_id', auth()->user()->id);
 			});
+
+			if (Auth::check()) {
+				$quizQuery->whereDoesntHave('users', function ($relationQuery) {
+					$relationQuery->where('user_id', auth()->id());
+				});
+			}
 		});
 	}
 }

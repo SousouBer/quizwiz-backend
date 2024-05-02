@@ -135,6 +135,7 @@ class RegisterTest extends TestCase
 		$response = $this->post(route('register'), [
 			'username'                           => $newUser->username,
 			'email'                              => $newUser->email,
+			'terms'                              => true,
 			'password'                           => 'password',
 			'password_confirmation'              => 'password',
 		]);
