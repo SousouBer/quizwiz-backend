@@ -17,6 +17,7 @@ class QuizResource extends JsonResource
 			'difficulty_level' => $this->unless($request->route()->getName() === 'quizzes.show', DifficultyLevelResource::make($this->DifficultyLevel)),
 			$this->mergeWhen($request->route('quiz') && $request->route()->getName() !== 'quizzes.similar_quizzes', [
 				'instructions'          => $this->instructions,
+				'description'           => $this->description,
 				'questions'             => $this->questions->count(),
 				'questions_and_answers' => QuestionResource::collection($this->questions),
 			]),
