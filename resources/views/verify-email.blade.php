@@ -1,75 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verification</title>
-    <style>
-        body {
-            width: 100%;
-            background-color: #F3F4F6;
-        }
-
-        .main-container {
-            align-content: center;
-            padding: 2rem 0;
-            margin: 0 auto; 
-            width: 29rem
-        }
-
-        .heading-logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-container {
-            width: 5rem;
-        }
-
-        .btn-container {
-            display: flex;
-            justify-content: center;
-        }
-
-        .logo {
-            width: 100%;
-        }
-
-        .heading {
-            font-size: 2.75rem;
-            font-weight: 700;
-        }
-
-        .username {
-            padding: 0 0.25rem;
-            margin: 1rem;
-        }
-
-        .btn {
-            background-color: #4b69fd;
-            padding: 1rem 2.5rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-            color: #fff; 
-            text-decoration: none;"
-        }
-        </style>
-</head>
-<body>
-    <div class="main-container">
-            <div class="heading-logo-container">
-                <img src="{{ asset('/images/quizwiz.png') }}" alt="Quizwiz logo">
-                <h1 class="heading">Verify your email<br> address to get started</h1>
-            </div>
-            <div>
-                <p class="username">Hi, {{ $username }}!</p>
-                <p>You're almost there! To complete your sign up, please<br> verify your email address below.</p>
-            </div>
-            <div class="btn-container">
-                <a class="btn" href="{{config('app.frontend_url') . '/login?email=' .  $email . '&verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
-            </div>            
-        </div>
-    </body>
-</html> 
+<div style="width: 100%; padding: 4rem 0; background-color: #F3F4F6;">
+    <div style="align-content: center; text-align: center; padding: 2rem 0; margin: 0 auto; width: 50%; background-color: #F3F4F6;">
+        <img src="{{ asset('/images/quizwiz.png') }}" alt="Quizwiz logo">
+        <h1 style="text-align: center; font-size: 2.5rem; font-weight: 700; ">Verify your email<br> address to get started</h1>
+        <div style="margin-bottom: 2rem; text-align: start;">
+            <p style="font-size: 1rem; padding: 0 0.25rem; margin: 1rem, 0.5rem;">Hi, {{ $username }}!</p>
+            <p style="font-size: 1rem;">You're almost there! To complete your sign up, please<br> verify your email address below.</p>
+         </div>
+        <a style="font-size: 1rem; background-color: #4b69fd; padding: 0.75rem 1.75rem; border-radius: 0.75rem; margin-top: 1rem; color: #fff; text-decoration: none;" href="{{config('app.frontend_url') . '/login?email=' .  $email . '&verifyLink=' . $verificationUrl }}">Verify Your Email Address</a>
+    </div>
+</div>
