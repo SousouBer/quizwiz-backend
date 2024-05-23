@@ -25,7 +25,9 @@ class Quiz extends Resource
 	{
 		return [
 			ID::make()->sortable(),
-			BelongsTo::make('difficulty_level'),
+			BelongsTo::make('difficulty_level')->display(function ($difficultyLevel) {
+				return $difficultyLevel->title;
+			}),
 			BelongsToMany::make('Categories'),
 			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
 				return [

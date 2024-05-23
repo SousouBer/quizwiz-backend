@@ -30,6 +30,8 @@ class QuizController
 
 		if ($search) {
 			$quizzes->searchFilter($search);
+		} else {
+			$quizzes->orderByDesc('created_at');
 		}
 
 		if ($categoryIDs) {
