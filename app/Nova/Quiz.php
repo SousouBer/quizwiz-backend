@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
@@ -37,6 +38,7 @@ class Quiz extends Resource
 					Number::make('score')->rules('required', 'integer', 'min:1', 'max:20'),
 				];
 			}),
+			HasMany::make('Questions'),
 			Text::make('title')->rules('required', 'string'),
 			Image::make('image')->rules('image')->disk('public'),
 			Markdown::make('description')->rules('required'),
