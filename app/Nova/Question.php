@@ -22,7 +22,7 @@ class Question extends Resource
 	{
 		return [
 			ID::make()->sortable(),
-			HasMany::make('Answer'),
+			HasMany::make('Answers'),
 			BelongsTo::make('Quiz'),
 			Text::make('text')->rules('required', 'string'),
 		];
