@@ -13,7 +13,7 @@ class Contact extends Resource
 	public static $title = 'id';
 
 	public static $search = [
-		'id',
+		'id', 'email', 'telephone', 'facebook', 'linkedin',
 	];
 
 	public function fields(NovaRequest $request): array

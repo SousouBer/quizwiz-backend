@@ -12,10 +12,10 @@ class DifficultyLevel extends Resource
 {
 	public static $model = \App\Models\DifficultyLevel::class;
 
-	public static $title = 'id';
+	public static $title = 'title';
 
 	public static $search = [
-		'id',
+		'id', 'title',
 	];
 
 	public function fields(NovaRequest $request): array

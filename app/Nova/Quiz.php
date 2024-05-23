@@ -16,10 +16,10 @@ class Quiz extends Resource
 {
 	public static $model = \App\Models\Quiz::class;
 
-	public static $title = 'id';
+	public static $title = 'title';
 
 	public static $search = [
-		'id',
+		'id', 'title',
 	];
 
 	public function fields(NovaRequest $request): array

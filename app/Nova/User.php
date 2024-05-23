@@ -16,7 +16,7 @@ class User extends Resource
 	public static $title = 'name';
 
 	public static $search = [
-		'id', 'name', 'email',
+		'id', 'username', 'email',
 	];
 
 	public function fields(NovaRequest $request): array
