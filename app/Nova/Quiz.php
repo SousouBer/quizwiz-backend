@@ -39,7 +39,6 @@ class Quiz extends Resource
 			Image::make('image')->rules('image')->disk('public'),
 			Markdown::make('description')->rules('required'),
 			Text::make('instructions')->rules('required', 'string'),
-			Number::make('points')->rules('required', 'integer', 'min:1', 'max:20'),
 			Number::make('time')->rules('required', 'integer', 'min:1', 'max:20'),
 		];
 	}

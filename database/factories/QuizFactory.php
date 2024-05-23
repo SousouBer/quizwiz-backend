@@ -13,7 +13,6 @@ class QuizFactory extends Factory
 			'image'        => fake()->imageUrl(),
 			'description'  => fake()->words(10, true),
 			'instructions' => fake()->sentence(),
-			'points'       => fake()->numberBetween(1, 10),
 			'time'         => fake()->numberBetween(1, 10),
 		];
 	}
