@@ -3,10 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -25,12 +23,6 @@ class User extends Resource
 	{
 		return [
 			ID::make()->sortable(),
-			BelongsToMany::make('Quizzes')->fields(function (NovaRequest $request, $relatedModel) {
-				return [
-					Number::make('time_taken')->min(1)->max(20)->step(1),
-					Number::make('score')->min(1)->max(20)->step(1),
-				];
-			}),
 			Gravatar::make()->maxWidth(50),
 
 			Text::make('Username')

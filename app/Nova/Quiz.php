@@ -32,12 +32,6 @@ class Quiz extends Resource
 			BelongsToMany::make('Categories')->display(function ($category) {
 				return $category->title;
 			}),
-			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
-				return [
-					Number::make('time_taken')->rules('required', 'integer', 'min:1', 'max:20'),
-					Number::make('score')->rules('required', 'integer', 'min:1', 'max:20'),
-				];
-			}),
 			HasMany::make('Questions'),
 			Text::make('title')->rules('required', 'string'),
 			Image::make('image')->rules('image')->disk('public'),
