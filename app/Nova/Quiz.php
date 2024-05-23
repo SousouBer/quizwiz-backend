@@ -28,7 +28,9 @@ class Quiz extends Resource
 			BelongsTo::make('difficulty_level')->display(function ($difficultyLevel) {
 				return $difficultyLevel->title;
 			}),
-			BelongsToMany::make('Categories'),
+			BelongsToMany::make('Categories')->display(function ($category) {
+				return $category->title;
+			}),
 			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
 				return [
 					Number::make('time_taken')->rules('required', 'integer', 'min:1', 'max:20'),
