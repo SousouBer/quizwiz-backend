@@ -34,7 +34,7 @@ class Quiz extends Resource
 				];
 			}),
 			Text::make('title')->rules('required', 'string'),
-			Image::make('image')->rules('required', 'image')->disk('public'),
+			Image::make('image')->rules('image')->disk('public'),
 			Markdown::make('description')->rules('required'),
 			Text::make('instructions')->rules('required', 'string'),
 			Number::make('points')->rules('required', 'integer', 'min:1', 'max:20'),
