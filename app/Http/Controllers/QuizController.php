@@ -30,8 +30,6 @@ class QuizController
 
 		if ($search) {
 			$quizzes->searchFilter($search);
-		} else {
-			$quizzes->orderByDesc('created_at');
 		}
 
 		if ($categoryIDs) {
@@ -52,6 +50,10 @@ class QuizController
 			} else {
 				$quizzes->incompletedQuizzes();
 			}
+		}
+
+		if (!$sort) {
+			$quizzes->orderByDesc('created_at');
 		}
 
 		return QuizResource::collection($quizzes->paginate(9));
