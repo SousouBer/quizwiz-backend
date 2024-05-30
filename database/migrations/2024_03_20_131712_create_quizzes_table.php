@@ -17,6 +17,7 @@ return new class extends Migration {
 			$table->string('image');
 			$table->string('description');
 			$table->string('instructions');
+			$table->tinyInteger('points')->unsigned();
 			$table->tinyInteger('time')->unsigned();
 			$table->timestamps();
 		});
