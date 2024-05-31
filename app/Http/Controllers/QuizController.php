@@ -52,6 +52,10 @@ class QuizController
 			}
 		}
 
+		if (!$sort) {
+			$quizzes->orderByDesc('created_at');
+		}
+
 		return QuizResource::collection($quizzes->paginate(9));
 	}
 

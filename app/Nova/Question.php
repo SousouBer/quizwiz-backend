@@ -12,17 +12,17 @@ class Question extends Resource
 {
 	public static $model = \App\Models\Question::class;
 
-	public static $title = 'id';
+	public static $title = 'text';
 
 	public static $search = [
-		'id',
+		'id', 'text',
 	];
 
 	public function fields(NovaRequest $request): array
 	{
 		return [
 			ID::make()->sortable(),
-			HasMany::make('Answer'),
+			HasMany::make('Answers'),
 			BelongsTo::make('Quiz'),
 			Text::make('text')->rules('required', 'string'),
 		];

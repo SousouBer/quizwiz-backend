@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
@@ -15,30 +16,28 @@ class Quiz extends Resource
 {
 	public static $model = \App\Models\Quiz::class;
 
-	public static $title = 'id';
+	public static $title = 'title';
 
 	public static $search = [
-		'id',
+		'id', 'title',
 	];
 
 	public function fields(NovaRequest $request): array
 	{
 		return [
 			ID::make()->sortable(),
-			BelongsTo::make('difficulty_level'),
-			BelongsToMany::make('Categories'),
-			BelongsToMany::make('Users')->nullable()->fields(function (NovaRequest $request, $relatedModel) {
-				return [
-					Number::make('time_taken')->rules('required', 'integer', 'min:1', 'max:20'),
-					Number::make('score')->rules('required', 'integer', 'min:1', 'max:20'),
-				];
+			BelongsTo::make('difficulty_level')->display(function ($difficultyLevel) {
+				return $difficultyLevel->title;
 			}),
+			BelongsToMany::make('Categories')->display(function ($category) {
+				return $category->title;
+			}),
+			HasMany::make('Questions'),
 			Text::make('title')->rules('required', 'string'),
-			Image::make('image')->rules('required', 'image')->disk('public'),
+			Image::make('image')->rules('image')->disk('public'),
 			Markdown::make('description')->rules('required'),
 			Text::make('instructions')->rules('required', 'string'),
-			Number::make('points')->rules('required', 'integer', 'min:1', 'max:20'),
-			Number::make('time')->rules('required', 'integer', 'min:1', 'max:20'),
+			Number::make('time')->rules('required', 'integer'),
 		];
 	}
 
